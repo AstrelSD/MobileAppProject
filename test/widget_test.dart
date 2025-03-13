@@ -1,12 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flame/game.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:mobile_app_roject/game/game_dev.dart';
 
 void main() {
   testWidgets('GameWidget renders correctly', (WidgetTester tester) async {
     // Build the game widget and trigger a frame.
     await tester.pumpWidget(
-        GameWidget(game: ProjectGame())); // Use GameWidget to load the game
+        GameWidget(game: PlatFormerGameDev())); // Use GameWidget to load the game
 
     // Verify that the GameWidget is rendered
     expect(find.byType(GameWidget), findsOneWidget);

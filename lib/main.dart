@@ -1,27 +1,23 @@
-import 'package:flame/game.dart';
-import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/parallax.dart';
+import 'package:flutter/services.dart';
+// import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mobile_app_roject/screens/platformer_splash.dart';
 
-void main() {
-  runApp(GameWidget(game: ProjectGame()));
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-class ProjectGame extends FlameGame {
-  @override
-  Future<void> onLoad() async {
-    await super.onLoad();
+  // // Initialize Hive for Flutter
+  // await Hive.initFlutter();
+  // await Hive.openBox('gameData'); 
 
-    // Load the parallax background
-    final mountainBackground = await loadParallaxComponent(
-      [
-        ParallaxImageData('sea2.png'),
-      ],
-      baseVelocity: Vector2(10, 0), // Moves the background horizontally
-      velocityMultiplierDelta: Vector2(1.6, 1.0),
-    );
+  // Set screen orientation to landscape
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
 
-    // Add the parallax background to the game
-    add(mountainBackground);
-  }
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: PlatformerSplash(),
+  ));
 }
