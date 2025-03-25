@@ -9,7 +9,14 @@ class PlatformerSplash extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
       duration: 3000,
-      splash: Image.asset("assets/images/Forest.png"),
+       splash: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset("assets/images/Forest.png"),
+          const SizedBox(height: 20),
+          const CircularProgressIndicator(), // Show progress indicator
+        ],
+      ),
       nextScreen: PlatformerMainMenu(),
       splashTransition: SplashTransition.scaleTransition,
       splashIconSize: 200,
