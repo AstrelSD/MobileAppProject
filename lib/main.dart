@@ -1,17 +1,19 @@
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// import 'package:flutter/services.dart';
 // import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mobile_app_roject/screens/platformer_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  Flame.device.fullScreen();
+  Flame.device.setLandscape();
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.landscapeLeft,
+  //   DeviceOrientation.landscapeRight,
+  // ]);
 
   runApp(const MyApp());
 }
