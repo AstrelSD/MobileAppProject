@@ -3,15 +3,12 @@ import 'package:mobile_app_roject/levels/base_level.dart';
 
 //This override is to test if tile loads
 class Level3 extends Level {
-  Level3() : super("Mountain.tmx"); // Assuming it's a Tiled map
+  Level3() : super(activeLevel: "Mountain.tmx"); // Assuming it's a Tiled map
 
   @override
   Future<void> onLoad() async {
-    final game = findGame()!;
-    if (game == null) {
-      print("Error: Game reference not found!");
-      return;
-    }
+    final game = gameRef;
+   
     final sprite = await Sprite.load("sprite");
     final background = SpriteComponent(
       sprite: sprite,
