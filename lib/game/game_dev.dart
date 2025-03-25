@@ -19,15 +19,16 @@ class PlatFormerGameDev extends FlameGame {
   }
 
   Future<void> loadGame(String level) async {
-    // Remove only Level components from the world, not all children
-    world.children.whereType<Level>().forEach(world.remove);
+    if (world.children.isNotEmpty) {
+      world.children.whereType<Level>().forEach(world.remove);
+    }
 
     if (gameLevels.containsKey(level)) {
       currentLevel = gameLevels[level]!();
-      await world.add(currentLevel); // Ensure level is fully loaded
+      await world.add(currentLevel);
       print("Loaded $level successfully.");
     } else {
-      print("Level $level not found!");
+      throw Exception("Error: Level $level not found!");
     }
   }
 }

@@ -7,21 +7,20 @@ class Level3 extends Level {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad(); // Load the Tiled map first
-
-    // Load a background image
-    final sprite = await Sprite.load("Mou.png");
-
-    // Get the game reference
     final game = findGame()!;
-    
+    if (game == null) {
+      print("Error: Game reference not found!");
+      return;
+    }
+    final sprite = await Sprite.load("sprite");
     final background = SpriteComponent(
       sprite: sprite,
       size: game.size, // Use the game screen size
       anchor: Anchor.topLeft,
     );
-
     add(background);
+    await super.onLoad();
+    loadLevelMechanics();
   }
 
   @override

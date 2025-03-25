@@ -5,19 +5,25 @@ import 'package:mobile_app_roject/screens/platformer_splash.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  // // Initialize Hive for Flutter
-  // await Hive.initFlutter();
-  // await Hive.openBox('gameData'); 
-
-  // Set screen orientation to landscape
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeRight,
   ]);
 
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: PlatformerSplash(),
-  ));
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: PlatformerSplash(),
+    );
+  }
 }

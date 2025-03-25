@@ -9,11 +9,15 @@ abstract class Level extends World {
   Level(this.activeLevel);
 
   @override
-  FutureOr<void> onLoad() async {
-    level = await TiledComponent.load(activeLevel, Vector2.all(16));
+  Future<void> onLoad() async {
+  try {
+    level = await TiledComponent.load('tiles/$activeLevel', Vector2.all(16));
     add(level);
-    loadLevelMechanics(); 
+    loadLevelMechanics();
+  } catch (e) {
+    print("Error loading level $activeLevel: $e");
   }
+}
 
   void loadLevelMechanics(); 
 }
