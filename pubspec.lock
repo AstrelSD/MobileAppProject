@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: "0c64e928dcbefddecd234205422bcfc2b5e6d31be0b86fef0d0dd48d7b4c9742"
+      sha256: "7dcbd0f87fe5f61cb28da39a1a8b70dbc106e2fe0516f7836eb7bb2948481a12"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.4"
+    version: "4.0.5"
   async:
     dependency: transitive
     description:
@@ -93,18 +93,18 @@ packages:
     dependency: "direct main"
     description:
       name: flame
-      sha256: "03e90d4bd3bc4f6a325602914ee27509f02d8743bb7ccb9282c88192b58eeb84"
+      sha256: "6a68254f6d6a298e14bb1671147d859e73bb505e05bf2ab4fb0bf663cb3b2696"
       url: "https://pub.dev"
     source: hosted
-    version: "1.26.0"
+    version: "1.26.1"
   flame_tiled:
     dependency: "direct main"
     description:
       name: flame_tiled
-      sha256: "6ef580b1ab4dd0222477d8d5e01298dd4607d0e75b295ad23c18fb2f881817ab"
+      sha256: "0f6fbfce7775fd8698dc53fc21cb94f7c96ecc9c51680e02fe1115dce540ed8f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.2"
+    version: "2.0.3"
   flutter:
     dependency: "direct main"
     description: flutter

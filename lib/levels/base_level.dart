@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:mobile_app_roject/actors/character.dart';
+import 'package:mobile_app_roject/game/game_dev.dart';
 
-abstract class Level extends World {
+abstract class Level extends World with HasGameRef<PlatFormerGameDev> {
   late TiledComponent level;
   final String activeLevel;
   PositionComponent? player;
@@ -13,15 +14,19 @@ abstract class Level extends World {
   @override
   Future<void> onLoad() async {
     try {
-      level = await TiledComponent.load('tiles/$activeLevel', Vector2.all(16));
+      level = await TiledComponent.load(activeLevel, Vector2.all(16));
       add(level);
-      final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('spawnpoints');
+      final spawnPointsLayer =
+          level.tileMap.getLayer<ObjectGroup>('spawnpoints');
       for (final spawnPoint in spawnPointsLayer!.objects) {
         switch (spawnPoint.class_) {
           case 'Character':
-            final character = Character(character: "character", position: Vector2(spawnPoint.x, spawnPoint.y));
+            final character = Character(
+                character: "character",
+                position: Vector2(spawnPoint.x, spawnPoint.y));
             add(character);
-          break;
+            gameRef.camera.follow(character);
+            break;
         }
       }
 
