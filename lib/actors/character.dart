@@ -15,15 +15,15 @@ class Character extends SpriteAnimationGroupComponent<CharacterState> with HasGa
   late final SpriteAnimation jumpAnimation;
 
   @override
-  Future<void> onLoad() async {
+  FutureOr<void> onLoad() async {
     await _loadCharacterAnimations();
     return super.onLoad();
   }
 
-  Future<void> _loadCharacterAnimations() async {
-    idleAnimation = await _loadAsepriteAnimation('idle');
-    runningAnimation = await _loadAsepriteAnimation('run');
-    jumpAnimation = await _loadAsepriteAnimation('jump');
+  _loadCharacterAnimations()  {
+    idleAnimation = _loadAsepriteAnimation('Idle',11);
+    runningAnimation = _loadAsepriteAnimation('Run', 12);
+    jumpAnimation = _loadAsepriteAnimation('Jump', 1);
 
     animations = {
       CharacterState.idle: idleAnimation,
@@ -34,30 +34,15 @@ class Character extends SpriteAnimationGroupComponent<CharacterState> with HasGa
     current = CharacterState.idle; // Set initial state
   }
 
-  Future<SpriteAnimation> _loadAsepriteAnimation(String state) async {
-    final image = await gameRef.images.load('Characters/$character/$state.png');
-    final jsonData = await gameRef.assets.readJson('Characters/$character/$state.json');
-    
-    // Manually parse the Aseprite JSON data into the correct animation
-      // need to research more on aseprite part
-
-    final frames = jsonData['frames'] as List;
-    final textureSize = Vector2.all(32); // Assuming each frame is 32x32 pixels
-    final animationFrames = <Sprite>[];
-
-    for (var frame in frames) {
-      final x = frame['frame']['x'] as double;
-      final y = frame['frame']['y'] as double;
-      final width = frame['frame']['w'] as double;
-      final height = frame['frame']['h'] as double;
-      final sprite = Sprite(image, srcPosition: Vector2(x, y), srcSize: Vector2(width, height));
-      animationFrames.add(sprite);
-    }
-
-    return SpriteAnimation.spriteList(animationFrames, stepTime: stepTime);
+  SpriteAnimation _loadAsepriteAnimation(String state,int amount) {
+      return SpriteAnimation.fromFrameData(
+        game.images.fromCache('Main Characters/$character/$state (32x32).png'),
+        SpriteAnimationData.sequenced(
+          amount: amount,
+          stepTime: stepTime, 
+          textureSize: Vector2.all(32)
+        )
+      );
   }
-  // Animation control (direct use of `current`)
-  void run() => current = CharacterState.running;
-  void jump() => current = CharacterState.jump;
-  void idle() => current = CharacterState.idle;
+ 
 }

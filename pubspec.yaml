@@ -29,6 +29,7 @@ flutter:
     - assets/images/
     - assets/tiles/
     - assets/Terrain/
+    - assets/images/Main Characters/Virtual Guy/
 
   fonts:
     - family: PixelFont

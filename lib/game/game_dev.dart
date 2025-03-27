@@ -10,7 +10,8 @@ class PlatFormerGameDev extends FlameGame {
   late final Level activeLevel;
   
   @override
-  FutureOr<void> onLoad() {
+  FutureOr<void> onLoad() async {
+    await images.loadAllImages();
     activeLevel = Level3();
     _loadGame(activeLevel);
     return super.onLoad();
