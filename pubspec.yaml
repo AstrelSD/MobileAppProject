@@ -28,6 +28,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/tiles/
+    - assets/Terrain/
 
   fonts:
     - family: PixelFont

@@ -1,43 +1,17 @@
-import 'dart:async';
-import 'package:flame/components.dart';
+ import 'dart:async';
+
+import 'package:flame/camera.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame_tiled/flame_tiled.dart';
-import 'package:mobile_app_roject/actors/character.dart';
-import 'package:mobile_app_roject/game/game_dev.dart';
 
-abstract class Level extends World with HasGameRef<PlatFormerGameDev> {
-  late TiledComponent level;
-  final String activeLevel;
-  PositionComponent? player;
+late TiledComponent level;
 
-  Level({required this.activeLevel});
-
+class Level extends World {
   @override
-  Future<void> onLoad() async {
-    try {
-      level = await TiledComponent.load(activeLevel, Vector2.all(16));
-      add(level);
-      final spawnPointsLayer =
-          level.tileMap.getLayer<ObjectGroup>('spawnpoints');
-      for (final spawnPoint in spawnPointsLayer!.objects) {
-        switch (spawnPoint.class_) {
-          case 'Character':
-            final character = Character(
-                character: "character",
-                position: Vector2(spawnPoint.x, spawnPoint.y));
-            add(character);
-            gameRef.camera.follow(character);
-            break;
-        }
-      }
+  FutureOr<void> onLoad() async {
 
-      loadLevelMechanics();
-
-      print("Level $activeLevel loaded successfully.");
-    } catch (e, stackTrace) {
-      print("Error loading level $activeLevel: $e\n$stackTrace");
-    }
+    level = await TiledComponent.load("level3.tmx", Vector2.all(16));
+    add(level);
+    return super.onLoad();
   }
-
-  // Abstract method for subclasses to implement level-specific logic
-  void loadLevelMechanics();
 }
