@@ -12,12 +12,11 @@ class PlatformerSplash extends StatelessWidget {
       splash: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Wrap the image with a flexible widget to avoid overflow
           Flexible(
             child: Image.asset("assets/images/Forest.png"),
           ),
           const SizedBox(height: 20),
-          const CircularProgressIndicator(), // Show progress indicator
+          const CircularProgressIndicator(),
         ],
       ),
       nextScreen: PlatformerMainMenu(),
