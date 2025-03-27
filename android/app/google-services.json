@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "309713315529",
+    "project_id": "gamedb-8ce60",
+    "storage_bucket": "gamedb-8ce60.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309713315529:android:997df82d7f5c36bcae8f18",
+        "android_client_info": {
+          "package_name": "com.example.mobile_app_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsZv9UuSyE721_oi2-NjokSnlQgnwDl88"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
