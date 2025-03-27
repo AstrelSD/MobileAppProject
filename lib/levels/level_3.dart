@@ -1,26 +1,17 @@
-// import 'package:flame/components.dart';
-// import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/base_level.dart';
 
-// //This override is to test if tile loads
-// class Level3 extends Level {
-//   Level3() : super(activeLevel: "level3.tmx"); // Assuming it's a Tiled map
+class Level3 extends Level {
+  Level3() : super(activeLevel: "level3.tmx");
 
-//   @override
-//   Future<void> onLoad() async {
-//     // final game = findGame();
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();  // Load the base level (Tiled map)
+    loadLevelMechanics();  // Add level-specific mechanics
+  }
 
-//     // final sprite = await Sprite.load("Idle (32x32).png");
-//     // final background = SpriteComponent(
-//     //   sprite: sprite,
-//     //   size: game?.size, // Use the game screen size
-//     //   anchor: Anchor.topLeft,
-//     // );
-//     await super.onLoad();
-//     loadLevelMechanics();
-//   }
-
-//   @override
-//   void loadLevelMechanics() {
-//     // Add level-specific mechanics here
-//   }
-// }
+  @override
+  void loadLevelMechanics() {
+    // Level-specific mechanics for Level3
+    // Example: Add enemies, power-ups, platforms, etc.
+  }
+}

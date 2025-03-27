@@ -1,17 +1,26 @@
- import 'dart:async';
-
-import 'package:flame/camera.dart';
-import 'package:flame/extensions.dart';
+import 'dart:async';
+import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 
-late TiledComponent level;
-
 class Level extends World {
-  @override
-  FutureOr<void> onLoad() async {
+  late TiledComponent level;
+  final String activeLevel;
 
-    level = await TiledComponent.load("level3.tmx", Vector2.all(16));
+  // Constructor to accept the level map file
+  Level({required this.activeLevel});
+
+  Future<void> loadLevel() async {
+    level = await TiledComponent.load(activeLevel, Vector2.all(16));
     add(level);
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await loadLevel(); // Loads the specific level dynamically
     return super.onLoad();
+  }
+
+  void loadLevelMechanics() {
+    // Override in subclasses for level-specific mechanics
   }
 }
