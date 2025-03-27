@@ -10,7 +10,7 @@ class GameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GameWidget(
-        game: PlatFormerGameDev(initialLevel: initialLevel), // Loads the level
+        game: PlatFormerGameDev(), // Loads the level
       ),
     );
   }
