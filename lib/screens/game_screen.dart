@@ -4,9 +4,9 @@ import 'package:mobile_app_roject/game/game_dev.dart';
 
 class GameScreen extends StatefulWidget {
   final String initialLevel;
+  final String character;
 
-  const GameScreen({super.key, required this.initialLevel});
-
+  const GameScreen({super.key, required this.initialLevel, required this.character});
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -24,7 +24,9 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GameWidget(
-        game: game,
+        game: PlatFormerGameDev( 
+          character: character
+        ), // Loads the level
       ),
     );
   }

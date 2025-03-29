@@ -9,28 +9,26 @@ class Level extends World with HasCollisionDetection {
   final String activeLevel;
   final Completer<void> _completer = Completer();
   late Character player;
+  final String character;
 
-  Level({required this.activeLevel});
+  // Constructor to accept the level map file
+  Level({required this.activeLevel, required this.character});
 
   Future<void> get ready => _completer.future;
 
   Future<void> loadLevel() async {
-    try {
-      level = await TiledComponent.load('$activeLevel', Vector2.all(16));
-      add(level);
-
-      final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
+    level = await TiledComponent.load(activeLevel, Vector2.all(16));
+    add(level);
+    print('Character selected: $character');
+    final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
       if (spawnPointsLayer == null) {
         throw Exception('object1 layer not found in map');
       }
-
       bool playerFound = false;
-      for (final spawnPoint in spawnPointsLayer.objects) {
-        if (spawnPoint.class_ == 'Player') {
-          player = Character(
-            character: 'Virtual Guy',
-            position: Vector2(spawnPoint.x, spawnPoint.y),
-          );
+    for (final spawnPoint in spawnPointsLayer!.objects) {
+      switch (spawnPoint.class_) {
+        case 'Player':
+          final player = Character(character: character, position: Vector2(spawnPoint.x, spawnPoint.y));
           add(player);
           playerFound = true;
           break;

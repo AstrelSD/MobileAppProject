@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/collisions.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 
@@ -11,21 +12,33 @@ enum CharacterDirection { left, right, none }
 
 class Character extends SpriteAnimationGroupComponent<CharacterState>
     with HasGameRef<PlatFormerGameDev>, CollisionCallbacks {
+class Character extends SpriteAnimationGroupComponent<CharacterState> with HasGameRef<PlatFormerGameDev> {
   final String character;
   final double _speed = 200;
   final double _jumpForce = -300;
   final double _gravity = 800;
 
-  Vector2 velocity = Vector2.zero();
+  Character({required Vector2 position, this.character = 'Virtual Guy'}) : super(position: position);
   bool isOnGround = false;
   bool isFacingRight = true;
-  CharacterDirection direction = CharacterDirection.none;
   bool isMoving = false;
 
   Character({required Vector2 position, required this.character})
       : super(position: position, size: Vector2.all(32));
 
   final double stepTime = 0.05;
+  
+  CharacterDirection characterDirection = CharacterDirection.none;
+  double movespeed = 100;
+  Vector2 velocity = Vector2.zero();
+  bool isFacingRight = true;
+  
+  // Jump parameters
+  bool isJumping = false;
+  double jumpForce = -300;
+  double gravity = 800;
+  double floorHeight = 0; // This will be set based on level collision
+
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   late final SpriteAnimation jumpAnimation;
@@ -39,12 +52,21 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
     ));
 
     await _loadCharacterAnimations();
+    // Set initial floor height based on spawn position
+    floorHeight = position.y;
 
     // Set initial state
     current = CharacterState.idle;
     isOnGround = false;
 
     return super.onLoad();
+  }
+
+  @override
+  void update(double dt) {
+    _updateCharacterMovement(dt);
+    _updateJump(dt);
+    super.update(dt);
   }
 
   _loadCharacterAnimations() {
@@ -77,6 +99,15 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
       flipHorizontallyAroundCenter();
       isFacingRight = false;
     }
+  SpriteAnimation _loadAsepriteAnimation(String state, int amount) {
+    return SpriteAnimation.fromFrameData(
+      game.images.fromCache('Main Characters/$character/$state (32x32).png'),
+      SpriteAnimationData.sequenced(
+        amount: amount,
+        stepTime: stepTime,
+        textureSize: Vector2.all(32)
+      )
+    );
   }
 
   void moveRight() {
@@ -196,6 +227,72 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
       // Collision from left
       position.x = ground.position.x - size.x;
       velocity.x = 0;
+    }
+  }
+  
+  void _updateCharacterMovement(double dt) {
+    double dirX = 0.0;
+    switch (characterDirection) {
+      case CharacterDirection.left:
+        if (isFacingRight) {
+          flipHorizontallyAroundCenter();
+          isFacingRight = false;
+        }
+        dirX -= movespeed;
+        if (!isJumping) {
+          current = CharacterState.running;
+        }
+        break;
+      case CharacterDirection.right:
+        dirX += movespeed;
+        if (!isJumping) {
+          current = CharacterState.running;
+        }
+        if (!isFacingRight) {
+          flipHorizontallyAroundCenter();
+          isFacingRight = true;
+        }
+        break;
+      case CharacterDirection.none:
+        if (!isJumping) {
+          current = CharacterState.idle;
+        }
+        dirX = 0;
+        break;
+      default:
+    }
+
+    velocity.x = dirX;
+    position.x += velocity.x * dt;
+  }
+  
+  void jump() {
+    if (!isJumping) {
+      isJumping = true;
+      velocity.y = jumpForce;
+      current = CharacterState.jump;
+    }
+  }
+  
+  void _updateJump(double dt) {
+    if (isJumping) {
+      // Apply gravity
+      velocity.y += gravity * dt;
+      position.y += velocity.y * dt;
+      
+      // Check if character has landed
+      if (position.y >= floorHeight) {
+        position.y = floorHeight;
+        isJumping = false;
+        velocity.y = 0;
+        
+        // Reset animation state
+        if (characterDirection == CharacterDirection.none) {
+          current = CharacterState.idle;
+        } else {
+          current = CharacterState.running;
+        }
+      }
     }
   }
 }

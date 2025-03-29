@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/screens/character_select.dart';
+
 import 'package:mobile_app_roject/screens/game_screen.dart';
+import 'package:mobile_app_roject/widgets/menu_button.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
   const PlatformerMainMenu({super.key});
@@ -78,20 +81,32 @@ class PlatformerMainMenu extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                buildMenuButton('Continue', () {}),
-                SizedBox(height: 15),
-                buildMenuButton('New Game', () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => GameScreen(initialLevel: 'level_3'),
-                    ),
-                  );
+                MenuButton(
+                  text: 'Continue', 
+                  onPressed: () {
+                  // Navigate to the game screen
                 }),
                 SizedBox(height: 15),
-                buildMenuButton('Settings', () {}),
+                MenuButton(
+                    text: 'New Game',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CharacterSelect()));
+                    }),
                 SizedBox(height: 15),
-                buildMenuButton('Exit', () {}),
+                MenuButton(
+                  text: 'Settings',
+                  onPressed:  () {
+                  // Navigate to the settings screen
+                }),
+                SizedBox(height: 15),
+                MenuButton(
+                  text: 'Exit',
+                  onPressed: () {
+                  // Exit the app
+                }),
               ],
             ),
           ),
@@ -100,3 +115,4 @@ class PlatformerMainMenu extends StatelessWidget {
     );
   }
 }
+
