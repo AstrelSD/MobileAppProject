@@ -6,18 +6,20 @@ import 'package:mobile_app_roject/actors/character.dart';
 class Level extends World {
   late TiledComponent level;
   final String activeLevel;
+  final String character;
 
   // Constructor to accept the level map file
-  Level({required this.activeLevel});
+  Level({required this.activeLevel, required this.character});
 
   Future<void> loadLevel() async {
     level = await TiledComponent.load(activeLevel, Vector2.all(16));
     add(level);
+    print('Character selected: $character');
     final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
     for (final spawnPoint in spawnPointsLayer!.objects) {
       switch (spawnPoint.class_) {
         case 'Player':
-          final player = Character(character: 'Virtual Guy', position: Vector2(spawnPoint.x, spawnPoint.y));
+          final player = Character(character: character, position: Vector2(spawnPoint.x, spawnPoint.y));
           add(player);
           break;
         default:
@@ -35,4 +37,3 @@ class Level extends World {
     // Override in subclasses for level-specific mechanics
   }
 }
-
