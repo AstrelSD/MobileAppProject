@@ -5,13 +5,12 @@ class Level3 extends Level {
 
   @override
   Future<void> onLoad() async {
-    await super.onLoad(); // Load the base level (Tiled map)
-    loadLevelMechanics(); // Add level-specific mechanics
+    await super.onLoad();
+    loadLevelMechanics();
   }
 
   @override
   void loadLevelMechanics() {
-    // Level-specific mechanics for Level3
-    // Example: Add enemies, power-ups, platforms, etc.
+    // Level-specific mechanics here
   }
 }

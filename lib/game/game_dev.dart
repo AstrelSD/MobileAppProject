@@ -2,11 +2,14 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/events.dart';
+import 'package:flame/collisions.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
+import 'package:mobile_app_roject/screens/game_over_screen.dart';
 
-class PlatFormerGameDev extends FlameGame with TapCallbacks {
+class PlatFormerGameDev extends FlameGame
+    with TapCallbacks, HasCollisionDetection {
   late final CameraComponent cam;
   late final Level activeLevel;
   final String initialLevel;
@@ -18,15 +21,15 @@ class PlatFormerGameDev extends FlameGame with TapCallbacks {
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
 
-    switch (initialLevel) {
-      case 'level_3':
-        activeLevel = Level3();
-        break;
-      default:
-        activeLevel = Level3();
-    }
+    // Register overlay
+    overlays.addEntry('GameOver', (context, game) {
+      return GameOverScreen(initialLevel: initialLevel);
+    });
 
+    activeLevel = Level3();
     await _loadGame(activeLevel);
+
+    debugMode = true;
     return super.onLoad();
   }
 
@@ -39,12 +42,14 @@ class PlatFormerGameDev extends FlameGame with TapCallbacks {
     cam.viewfinder.anchor = Anchor.center;
     addAll([cam, level]);
 
-    // Wait for the level to be fully loaded
     await level.ready;
-
-    // Find the player character - we know it exists because level.ready completed
     player = level.children.whereType<Character>().first;
     cam.follow(player);
+  }
+
+  void resetGame() {
+    overlays.remove('GameOver');
+    _loadGame(activeLevel);
   }
 
   @override
