@@ -12,6 +12,9 @@ import 'package:mobile_app_roject/actors/character.dart';
 class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, KeyboardEvents {
   late final CameraComponent cam;
   late final Level activeLevel;
+  final String character;
+
+  PlatFormerGameDev({required this.character});
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
   Character? _playerReference;
@@ -21,18 +24,15 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
-    
-    activeLevel = Level3();
-    _loadGame(activeLevel);
-    
-    // Add joystick and jump button after game is loaded
+    print('Character selected: $character');
+    activeLevel = Level3(character: character);
+    _loadGame(activeLevel, character);
     addJoystick();
     addJumpButton();
-    
     return super.onLoad();
   }
 
-  void _loadGame(Level level) {
+  void _loadGame(Level level, String character) {
     level = activeLevel;
     cam = CameraComponent.withFixedResolution(world: level, width: size.x, height: size.y);
     cam.viewfinder.anchor = Anchor.topLeft;
