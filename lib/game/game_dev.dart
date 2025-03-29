@@ -21,6 +21,7 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
   bool _usingKeyboard = false;
   final _keyboardKeysPressed = <LogicalKeyboardKey>{};
   
+  late GameHud hud;
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
@@ -29,14 +30,16 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
     _loadGame(activeLevel, character);
     addJoystick();
     addJumpButton();
+    hud = GameHud();
     return super.onLoad();
   }
 
   void _loadGame(Level level, String character) {
     level = activeLevel;
-    cam = CameraComponent.withFixedResolution(world: level, width: size.x, height: size.y);
+    cam = CameraComponent.withFixedResolution(
+    world: level, width: size.x, height: size.y);
     cam.viewfinder.anchor = Anchor.topLeft;
-    addAll([cam, activeLevel]);
+    addAll([cam, hud, activeLevel]);
   }
   
   void addJoystick() {
