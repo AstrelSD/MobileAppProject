@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/actors/character.dart';
+import 'package:mobile_app_roject/screens/game_hud.dart';
  
 class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, KeyboardEvents {
   late final CameraComponent cam;
@@ -21,9 +22,11 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
   bool _usingKeyboard = false;
   final _keyboardKeysPressed = <LogicalKeyboardKey>{};
   
+  late GameHud hud;
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
+    hud = GameHud();
     print('Character selected: $character');
     activeLevel = Level3(character: character);
     _loadGame(activeLevel, character);
@@ -34,9 +37,10 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
 
   void _loadGame(Level level, String character) {
     level = activeLevel;
-    cam = CameraComponent.withFixedResolution(world: level, width: size.x, height: size.y);
+    cam = CameraComponent.withFixedResolution(
+    world: level, width: size.x, height: size.y);
     cam.viewfinder.anchor = Anchor.topLeft;
-    addAll([cam, activeLevel]);
+    addAll([cam, hud, activeLevel]);
   }
   
   void addJoystick() {
