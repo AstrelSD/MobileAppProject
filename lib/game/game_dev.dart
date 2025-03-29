@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/actors/character.dart';
+import 'package:mobile_app_roject/screens/game_hud.dart';
  
 class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, KeyboardEvents {
   late final CameraComponent cam;
@@ -25,12 +26,12 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
+    hud = GameHud();
     print('Character selected: $character');
     activeLevel = Level3(character: character);
     _loadGame(activeLevel, character);
     addJoystick();
     addJumpButton();
-    hud = GameHud();
     return super.onLoad();
   }
 
