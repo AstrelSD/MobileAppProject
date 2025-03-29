@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/screens/character_select.dart';
 
 import 'package:mobile_app_roject/screens/game_screen.dart';
 
@@ -51,7 +52,7 @@ class PlatformerMainMenu extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              GameScreen(initialLevel: 'level_3')));
+                              CharacterSelect()));
                 }),
                 SizedBox(height: 15),
                 buildMenuButton('Settings', () {
