@@ -35,4 +35,3 @@ class Level extends World {
     // Override in subclasses for level-specific mechanics
   }
 }
-
