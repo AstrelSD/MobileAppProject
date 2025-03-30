@@ -44,10 +44,17 @@ class PlatformerMainMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 MenuButton(
-                  text: 'Continue', 
-                  onPressed: () {
-                  // Navigate to the game screen
-                }),
+                text: 'Continue',
+                onPressed: () async {
+                // var progress = await GameProgressService().getProgress();
+                //  if (progress.exists) {
+                //   int level = progress['level'];
+                //   int score = progress['score'];
+                // //   Navigator.push(context, MaterialPageRoute(builder: (context) => GameScreen(level: level, score: score)));
+                // } else {
+                //   print('No saved game found');
+                // }
+              },),
                 SizedBox(height: 15),
                 MenuButton(
                     text: 'New Game',
