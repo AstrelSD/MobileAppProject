@@ -80,7 +80,7 @@ class CharacterSelect extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  text: 'Start Game',
+                                  text: 'Start Game!!',
                                 ),
                               ],
                             ),
