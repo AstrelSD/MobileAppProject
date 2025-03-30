@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/character_select.dart';
-
 import 'package:mobile_app_roject/screens/game_screen.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
+import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
   const PlatformerMainMenu({super.key});
@@ -62,7 +62,10 @@ class PlatformerMainMenu extends StatelessWidget {
                 MenuButton(
                   text: 'Settings',
                   onPressed:  () {
-                  // Navigate to the settings screen
+                  showDialog(
+                      context: context,
+                      builder: (context) => const SettingsOverlay(),
+                  );
                 }),
                 SizedBox(height: 15),
                 MenuButton(
