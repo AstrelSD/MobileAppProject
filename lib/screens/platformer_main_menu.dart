@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/screens/character_select.dart';
 
 import 'package:mobile_app_roject/screens/game_screen.dart';
+import 'package:mobile_app_roject/widgets/menu_button.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
   const PlatformerMainMenu({super.key});
@@ -42,23 +44,30 @@ class PlatformerMainMenu extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                buildMenuButton('Continue', () {
+                MenuButton(
+                  text: 'Continue', 
+                  onPressed: () {
                   // Navigate to the game screen
                 }),
                 SizedBox(height: 15),
-                buildMenuButton('New Game', () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              GameScreen(initialLevel: 'level_3')));
-                }),
+                MenuButton(
+                    text: 'New Game',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CharacterSelect()));
+                    }),
                 SizedBox(height: 15),
-                buildMenuButton('Settings', () {
+                MenuButton(
+                  text: 'Settings',
+                  onPressed:  () {
                   // Navigate to the settings screen
                 }),
                 SizedBox(height: 15),
-                buildMenuButton('Exit', () {
+                MenuButton(
+                  text: 'Exit',
+                  onPressed: () {
                   // Exit the app
                 }),
               ],
@@ -70,39 +79,3 @@ class PlatformerMainMenu extends StatelessWidget {
   }
 }
 
-Widget buildMenuButton(String text, VoidCallback onPressed) {
-  return SizedBox(
-    width: 250,
-    height: 50,
-    child: ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.greenAccent,
-        foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-          side: BorderSide(
-              color: const Color.fromARGB(255, 50, 50, 37), width: 4),
-        ),
-        elevation: 10,
-        shadowColor: Colors.black,
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          letterSpacing: 2,
-          fontFamily: 'PixelFont',
-          shadows: [
-            Shadow(
-              blurRadius: 5,
-              color: Colors.black,
-              offset: Offset(2, 2),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
