@@ -39,13 +39,14 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
     ));
 
     loadCharacterAnimations();
+    print('$character');
     current = CharacterState.idle;
     return super.onLoad();
   }
 
   void loadCharacterAnimations() {
     idleAnimation = _loadAsepriteAnimation('Idle', 11);
-    runningAnimation = _loadAsepriteAnimation('Run', 12);
+    runningAnimation = _loadAsepriteAnimation('Walk', 12);
     jumpAnimation = _loadAsepriteAnimation('Jump', 1);
 
     animations = {
@@ -57,7 +58,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
 
   SpriteAnimation _loadAsepriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
-      game.images.fromCache('Main Characters/$character/$state (32x32).png'),
+      game.images.fromCache('Main Characters/$character/$state.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,

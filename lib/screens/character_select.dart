@@ -9,11 +9,11 @@ class CharacterSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> playerCharacters = [
       {
-        'name': 'Male',
+        'name': 'Male Character',
         'image': 'assets/images/Main Characters/Male Character/Idle.png'
       },
       {
-        'name': 'Female',
+        'name': 'Female Character',
         'image': 'assets/images/Main Characters/Female Character/Idle.png'
       },
     ];
