@@ -9,12 +9,12 @@ class CharacterSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> playerCharacters = [
       {
-        'name': 'Virtual Guy',
-        'image': 'assets/images/Main Characters/Virtual Guy/Idle (32x32).png'
+        'name': 'Male',
+        'image': 'assets/images/Main Characters/Male Character/Idle.png'
       },
       {
-        'name': 'Male',
-        'image': 'assets/images/Main Characters/Virtual Guy/Idle (32x32).png'
+        'name': 'Female',
+        'image': 'assets/images/Main Characters/Female Character/Idle.png'
       },
     ];
 
@@ -64,7 +64,7 @@ class CharacterSelect extends StatelessWidget {
                                 Image.asset(
                                   character['image']!,
                                   width: 100, // Adjust image width
-                                  height: 100, // Adjust image height
+                                  height: 120, // Adjust image height
                                   fit: BoxFit.cover,
                                 ),
                                 SizedBox(height: 10),

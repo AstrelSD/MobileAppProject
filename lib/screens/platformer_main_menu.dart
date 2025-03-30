@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/character_select.dart';
-import 'package:mobile_app_roject/screens/game_screen.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 

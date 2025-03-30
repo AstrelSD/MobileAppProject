@@ -24,12 +24,12 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/Main Characters/Virtual Guy/
+    - assets/images/Main Characters/Male Character/
     - assets/fonts/
     - assets/images/
     - assets/tiles/
     - assets/Terrain/
-    - assets/images/Main Characters/Virtual Guy/
+    - assets/images/Main Characters/Female Character/
     - assets/images/HUD/
 
   fonts:
