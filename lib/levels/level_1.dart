@@ -2,7 +2,8 @@ import 'package:mobile_app_roject/levels/base_level.dart';
 
 class Level1 extends Level {
   // Constructor only needs to pass character and activeLevel to the base class
-  Level1({required String character}) : super(activeLevel: "Level1.tmx", character: character);
+  Level1({required String character}) 
+      : super(activeLevel: "level1.tmx", character: character);
 
   @override
   Future<void> onLoad() async {
