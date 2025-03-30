@@ -6,7 +6,9 @@ class GameScreen extends StatefulWidget {
   final String initialLevel;
   final String character;
 
-  const GameScreen({super.key, required this.initialLevel, required this.character});
+  const GameScreen(
+      {super.key, required this.initialLevel, required this.character});
+
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -17,17 +19,16 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
-    game = PlatFormerGameDev(initialLevel: widget.initialLevel);
+    game = PlatFormerGameDev(
+      initialLevel: widget.initialLevel,
+      character: widget.character,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GameWidget(
-        game: PlatFormerGameDev( 
-          character: character
-        ), // Loads the level
-      ),
+      body: GameWidget(game: game),
     );
   }
 }

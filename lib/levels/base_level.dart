@@ -11,27 +11,32 @@ class Level extends World with HasCollisionDetection {
   late Character player;
   final String character;
 
-  // Constructor to accept the level map file
   Level({required this.activeLevel, required this.character});
 
   Future<void> get ready => _completer.future;
 
-  Future<void> loadLevel() async {
-    level = await TiledComponent.load(activeLevel, Vector2.all(16));
-    add(level);
-    print('Character selected: $character');
-    final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
+  @override
+  Future<void> onLoad() async {
+    try {
+      level = await TiledComponent.load(activeLevel, Vector2.all(16));
+      add(level);
+
+      final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
       if (spawnPointsLayer == null) {
         throw Exception('object1 layer not found in map');
       }
+
       bool playerFound = false;
-    for (final spawnPoint in spawnPointsLayer!.objects) {
-      switch (spawnPoint.class_) {
-        case 'Player':
-          final player = Character(character: character, position: Vector2(spawnPoint.x, spawnPoint.y));
-          add(player);
-          playerFound = true;
-          break;
+      for (final spawnPoint in spawnPointsLayer.objects) {
+        switch (spawnPoint.class_) {
+          case 'Player':
+            player = Character(
+              character: character,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+            );
+            add(player);
+            playerFound = true;
+            break;
         }
       }
 
@@ -47,29 +52,21 @@ class Level extends World with HasCollisionDetection {
             size: Vector2(groundObj.width, groundObj.height),
           );
           add(ground);
-
-          ground.add(RectangleHitbox(
-            size: Vector2(groundObj.width, groundObj.height),
-            position: Vector2.zero(),
-            isSolid: true,
-          ));
         }
       }
 
       _completer.complete();
     } catch (e) {
       _completer.completeError(e);
-      rethrow;
     }
-  }
-
-  @override
-  Future<void> onLoad() async {
-    await loadLevel();
-    return super.onLoad();
   }
 }
 
 class Ground extends PositionComponent with CollisionCallbacks {
-  Ground({required super.position, required super.size});
+  Ground({required super.position, required super.size}) {
+    add(RectangleHitbox(
+      size: size,
+      position: Vector2.zero(),
+    ));
+  }
 }

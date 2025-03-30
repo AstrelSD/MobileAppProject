@@ -18,9 +18,6 @@ class CharacterSelect extends StatelessWidget {
       },
     ];
 
-    final screenX = MediaQuery.of(context).size.width;
-    final screenY = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Center(
         child: Stack(
@@ -32,63 +29,69 @@ class CharacterSelect extends StatelessWidget {
             ),
             Center(
               child: Container(
-                padding: EdgeInsets.all(10),
-                width: screenX * 0.7,
-                height: screenY * 0.7,
+                padding: const EdgeInsets.all(20),
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                ),
                 decoration: BoxDecoration(
-                    color: Colors.black12,
-                    border: Border.all(
-                      width: 5,
-                      color: const Color.fromARGB(31, 0, 0, 0),
-                    ),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Select Character',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                  color: Colors.black12,
+                  border: Border.all(
+                    width: 5,
+                    color: const Color.fromARGB(31, 0, 0, 0),
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Select Character',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...playerCharacters.map((character) {
+                      const SizedBox(height: 20),
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 20,
+                        runSpacing: 20,
+                        children: playerCharacters.map((character) {
                           return Padding(
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(10),
                             child: Column(
                               children: [
                                 Image.asset(
                                   character['image']!,
-                                  width: 100, // Adjust image width
-                                  height: 100, // Adjust image height
+                                  width: 100,
+                                  height: 100,
                                   fit: BoxFit.cover,
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 MenuButton(
                                   onPressed: () {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => GameScreen(
-                                          initialLevel: 'level_3',
+                                          initialLevel: 'level3',
                                           character: character['name']!,
                                         ),
                                       ),
                                     );
                                   },
-                                  text: 'Start Game',
+                                  text: character['name']!,
                                 ),
                               ],
                             ),
                           );
-                        })
-                      ],
-                    ),
-                  ],
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

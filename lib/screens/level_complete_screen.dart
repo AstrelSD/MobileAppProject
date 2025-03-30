@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/game_screen.dart';
 
-class GameOverScreen extends StatefulWidget {
+class LevelCompleteScreen extends StatefulWidget {
   final String initialLevel;
   final String character;
 
-  const GameOverScreen({
+  const LevelCompleteScreen({
     super.key,
     required this.initialLevel,
     required this.character,
   });
 
   @override
-  State<GameOverScreen> createState() => _GameOverScreenState();
+  State<LevelCompleteScreen> createState() => _LevelCompleteScreenState();
 }
 
-class _GameOverScreenState extends State<GameOverScreen>
+class _LevelCompleteScreenState extends State<LevelCompleteScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
@@ -24,6 +24,7 @@ class _GameOverScreenState extends State<GameOverScreen>
 
   bool _isHoveringRestart = false;
   bool _isHoveringMenu = false;
+  bool _isHoveringNext = false;
 
   @override
   void initState() {
@@ -69,8 +70,8 @@ class _GameOverScreenState extends State<GameOverScreen>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.red[900]!,
-                  Colors.red[800]!,
+                  Colors.green[900]!,
+                  Colors.green[800]!,
                   Colors.black87,
                 ],
               ),
@@ -87,10 +88,10 @@ class _GameOverScreenState extends State<GameOverScreen>
                     height: 300 * _scaleAnimation.value,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.red[700],
+                      color: Colors.green[700],
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.red.withOpacity(0.7),
+                          color: Colors.green.withOpacity(0.7),
                           blurRadius: 100 * _scaleAnimation.value,
                           spreadRadius: 20 * _scaleAnimation.value,
                         ),
@@ -116,7 +117,7 @@ class _GameOverScreenState extends State<GameOverScreen>
                   Stack(
                     children: [
                       Text(
-                        'GAME OVER',
+                        'LEVEL COMPLETE!',
                         style: TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
@@ -129,7 +130,7 @@ class _GameOverScreenState extends State<GameOverScreen>
                         ),
                       ),
                       Text(
-                        'GAME OVER',
+                        'LEVEL COMPLETE!',
                         style: TextStyle(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
@@ -149,7 +150,7 @@ class _GameOverScreenState extends State<GameOverScreen>
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    'Your adventure has ended...',
+                    'You have completed the level!',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white70,
@@ -157,6 +158,26 @@ class _GameOverScreenState extends State<GameOverScreen>
                     ),
                   ),
                   const SizedBox(height: 40),
+                  _buildAnimatedButton(
+                    'Next Level',
+                    _isHoveringNext,
+                    Colors.orange[700]!,
+                    () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GameScreen(
+                            initialLevel: widget.initialLevel,
+                            character: widget.character,
+                          ),
+                        ),
+                      );
+                    },
+                    onHover: (hovering) {
+                      setState(() => _isHoveringNext = hovering);
+                    },
+                  ),
+                  const SizedBox(height: 20),
                   _buildAnimatedButton(
                     'Restart',
                     _isHoveringRestart,
@@ -194,21 +215,6 @@ class _GameOverScreenState extends State<GameOverScreen>
                     },
                   ),
                 ],
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 40,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                'Try again to beat your score!',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withOpacity(0.7),
-                  fontFamily: 'PixelFont',
-                ),
               ),
             ),
           ),

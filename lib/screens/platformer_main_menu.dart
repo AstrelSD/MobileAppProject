@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/character_select.dart';
 
-import 'package:mobile_app_roject/screens/game_screen.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
@@ -82,10 +81,10 @@ class PlatformerMainMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 MenuButton(
-                  text: 'Continue', 
-                  onPressed: () {
-                  // Navigate to the game screen
-                }),
+                    text: 'Continue',
+                    onPressed: () {
+                      // Navigate to the game screen
+                    }),
                 SizedBox(height: 15),
                 MenuButton(
                     text: 'New Game',
@@ -97,16 +96,16 @@ class PlatformerMainMenu extends StatelessWidget {
                     }),
                 SizedBox(height: 15),
                 MenuButton(
-                  text: 'Settings',
-                  onPressed:  () {
-                  // Navigate to the settings screen
-                }),
+                    text: 'Settings',
+                    onPressed: () {
+                      // Navigate to the settings screen
+                    }),
                 SizedBox(height: 15),
                 MenuButton(
-                  text: 'Exit',
-                  onPressed: () {
-                  // Exit the app
-                }),
+                    text: 'Exit',
+                    onPressed: () {
+                      // Exit the app
+                    }),
               ],
             ),
           ),
@@ -115,4 +114,3 @@ class PlatformerMainMenu extends StatelessWidget {
     );
   }
 }
-

@@ -2,62 +2,66 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flame/events.dart';
-import 'package:flame/collisions.dart';
-import 'package:mobile_app_roject/actors/character.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
+import 'package:mobile_app_roject/screens/game_hud.dart';
+import 'package:mobile_app_roject/screens/level_complete_screen.dart';
 
 class PlatFormerGameDev extends FlameGame
-    with TapCallbacks, HasCollisionDetection {
-import 'package:mobile_app_roject/actors/character.dart';
-import 'package:mobile_app_roject/screens/game_hud.dart';
- 
-class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, KeyboardEvents {
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        TapCallbacks,
+        HasCollisionDetection {
   late final CameraComponent cam;
   late final Level activeLevel;
   final String initialLevel;
+  final String character;
   late Character player;
 
-  PlatFormerGameDev({required this.initialLevel});
-
-  final String character;
-
-  PlatFormerGameDev({required this.character});
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
-  Character? _playerReference;
-  bool _usingKeyboard = false;
-  final _keyboardKeysPressed = <LogicalKeyboardKey>{};
-  
+  Character? playerReference;
+  bool usingKeyboard = false;
+  final keyboardKeysPressed = <LogicalKeyboardKey>{};
+
   late GameHud hud;
+
+  PlatFormerGameDev({required this.initialLevel, required this.character});
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
 
-    // Register overlay
     overlays.addEntry('GameOver', (context, game) {
-      return GameOverScreen(initialLevel: initialLevel);
+      return GameOverScreen(
+        initialLevel: initialLevel,
+        character: character,
+      );
     });
 
-    activeLevel = Level3();
-    await _loadGame(activeLevel);
+    overlays.addEntry('LevelComplete', (context, game) {
+      return LevelCompleteScreen(
+        initialLevel: initialLevel,
+        character: character,
+      );
+    });
+
+    activeLevel = Level3(character: character);
+    await loadGame(activeLevel);
 
     debugMode = true;
     hud = GameHud();
-    print('Character selected: $character');
-    activeLevel = Level3(character: character);
-    _loadGame(activeLevel, character);
     addJoystick();
     addJumpButton();
     return super.onLoad();
   }
 
-  Future<void> _loadGame(Level level) async {
+  Future<void> loadGame(Level level) async {
     cam = CameraComponent.withFixedResolution(
       world: level,
       width: 640,
@@ -68,18 +72,128 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
 
     await level.ready;
     player = level.children.whereType<Character>().first;
+    playerReference = player;
     cam.follow(player);
-  void _loadGame(Level level, String character) {
-    level = activeLevel;
-    cam = CameraComponent.withFixedResolution(
-    world: level, width: size.x, height: size.y);
-    cam.viewfinder.anchor = Anchor.topLeft;
-    addAll([cam, hud, activeLevel]);
   }
 
   void resetGame() {
     overlays.remove('GameOver');
-    _loadGame(activeLevel);
+    loadGame(activeLevel);
+  }
+
+  void addJoystick() {
+    final knob = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Knob.png')),
+    )..size = Vector2.all(64);
+
+    final background = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Joystick.png')),
+    )..size = Vector2.all(150);
+
+    joystick = JoystickComponent(
+      knob: knob,
+      background: background,
+      margin: const EdgeInsets.only(left: 32, bottom: 32),
+    );
+
+    joystick.position = Vector2(100, size.y - 100);
+    add(joystick);
+  }
+
+  void addJumpButton() {
+    final button = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/JumpButton.png')),
+    )..size = Vector2.all(64);
+
+    jumpButton = ButtonComponent(
+      button: button,
+      position: Vector2(size.x - 100, size.y - 100),
+      onPressed: () {
+        if (playerReference != null && playerReference!.isOnGround) {
+          playerReference!.jump();
+        }
+      },
+    );
+    add(jumpButton);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    keyboardKeysPressed.clear();
+    keyboardKeysPressed.addAll(keysPressed);
+    usingKeyboard = keysPressed.isNotEmpty;
+
+    if (playerReference != null &&
+        playerReference!.isOnGround &&
+        (keysPressed.contains(LogicalKeyboardKey.space) ||
+            keysPressed.contains(LogicalKeyboardKey.keyW) ||
+            keysPressed.contains(LogicalKeyboardKey.arrowUp))) {
+      playerReference!.jump();
+    }
+
+    return KeyEventResult.handled;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (playerReference == null) {
+      findPlayerReference();
+      return;
+    }
+
+    if (usingKeyboard) {
+      handleKeyboardMovement();
+    } else if (joystick.direction != JoystickDirection.idle) {
+      handleJoystickMovement();
+    } else {
+      playerReference!.stopMoving();
+    }
+  }
+
+  void handleKeyboardMovement() {
+    final isLeftKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
+
+    if (isLeftKeyPressed && isRightKeyPressed) {
+      playerReference!.stopMoving();
+    } else if (isLeftKeyPressed) {
+      playerReference!.moveLeft();
+    } else if (isRightKeyPressed) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
+      usingKeyboard = false;
+    }
+  }
+
+  void handleJoystickMovement() {
+    final delta = joystick.delta;
+
+    if (delta.x < -0.2) {
+      playerReference!.moveLeft();
+    } else if (delta.x > 0.2) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
+    }
+  }
+
+  void findPlayerReference() {
+    for (final component in activeLevel.children) {
+      if (component is Character) {
+        playerReference = component;
+        break;
+      }
+    }
   }
 
   @override
@@ -105,126 +219,5 @@ class PlatFormerGameDev extends FlameGame with HasKeyboardHandlerComponents, Dra
   void onTapCancel(TapCancelEvent event) {
     player.stopMoving();
     super.onTapCancel(event);
-  }
-  
-  void addJoystick() {
-    joystick = JoystickComponent(
-      knob: SpriteComponent(
-        sprite: Sprite(images.fromCache('HUD/Knob.png')),
-      ),
-      background: SpriteComponent(
-        sprite: Sprite(images.fromCache('HUD/Joystick.png')),
-      ),
-      margin: const EdgeInsets.only(left: 32, bottom: 32),
-    );
-    
-    // Configure joystick for horizontal movement only
-    joystick.position = Vector2(100, size.y - 100);
-    
-    add(joystick);
-  }
-  
-  void addJumpButton() {
-    jumpButton = ButtonComponent(
-      button: SpriteComponent(
-        sprite: Sprite(images.fromCache('HUD/JumpButton.png')),
-        size: Vector2.all(64),
-      ),
-      position: Vector2(size.x - 100, size.y - 100),
-      onPressed: () {
-        if (_playerReference != null && !_playerReference!.isJumping) {
-          _playerReference!.jump();
-        }
-      },
-    );
-    
-    add(jumpButton);
-  }
-  
-  @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    _keyboardKeysPressed.clear();
-    _keyboardKeysPressed.addAll(keysPressed);
-    
-    // Set flag that keyboard is being used
-    _usingKeyboard = keysPressed.isNotEmpty;
-    
-    // Check for jump key
-    if (_playerReference != null &&
-        !_playerReference!.isJumping &&
-        (keysPressed.contains(LogicalKeyboardKey.space) ||
-         keysPressed.contains(LogicalKeyboardKey.keyW) ||
-         keysPressed.contains(LogicalKeyboardKey.arrowUp))) {
-      _playerReference!.jump();
-    }
-    
-    return KeyEventResult.handled;
-  }
-  
-  @override
-  void update(double dt) {
-    super.update(dt);
-    
-    // Find player reference if not set
-    if (_playerReference == null) {
-      _findPlayerReference();
-      return;
-    }
-    
-    // Handle keyboard movement with priority over joystick
-    if (_usingKeyboard) {
-      _handleKeyboardMovement();
-    }
-    // Only use joystick if keyboard is not active
-    else if (joystick.direction != JoystickDirection.idle) {
-      _handleJoystickMovement();
-    }
-    // If no input, ensure character is idle
-    else {
-      _playerReference!.characterDirection = CharacterDirection.none;
-    }
-  }
-  
-  void _handleKeyboardMovement() {
-    final isLeftKeyPressed = _keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
-        _keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed = _keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
-        _keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
-
-    if (isLeftKeyPressed && isRightKeyPressed) {
-      _playerReference!.characterDirection = CharacterDirection.none;
-    } else if (isLeftKeyPressed) {
-      _playerReference!.characterDirection = CharacterDirection.left;
-    } else if (isRightKeyPressed) {
-      _playerReference!.characterDirection = CharacterDirection.right;
-    } else {
-      _playerReference!.characterDirection = CharacterDirection.none;
-      _usingKeyboard = false; // Reset flag if no direction keys are pressed
-    }
-  }
-  
-  void _handleJoystickMovement() {
-    final delta = joystick.delta;
-    
-    if (delta.x < -0.2) {
-      _playerReference!.characterDirection = CharacterDirection.left;
-    } else if (delta.x > 0.2) {
-      _playerReference!.characterDirection = CharacterDirection.right;
-    } else {
-      _playerReference!.characterDirection = CharacterDirection.none;
-    }
-  }
-  
-  void _findPlayerReference() {
-    // Find the player component in the active level
-    for (final component in activeLevel.children) {
-      if (component is Character) {
-        _playerReference = component;
-        break;
-      }
-    }
   }
 }
