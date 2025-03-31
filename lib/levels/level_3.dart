@@ -6,12 +6,11 @@ class Level3 extends Level {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    print('Character selected: $character');
     loadLevelMechanics();
   }
 
   @override
   void loadLevelMechanics() {
-    print('Level3-specific mechanics added');
+    // Level-specific mechanics here
   }
 }
