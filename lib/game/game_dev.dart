@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
+import 'package:mobile_app_roject/levels/level_2.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
@@ -50,10 +52,7 @@ class PlatFormerGameDev extends FlameGame
         character: character,
       );
     });
-
-    activeLevel = Level3(character: character);
-    await loadGame(activeLevel);
-
+    loadLevel();
     debugMode = true;
     hud = GameHud();
     addJoystick();
@@ -61,7 +60,25 @@ class PlatFormerGameDev extends FlameGame
     return super.onLoad();
   }
 
+  void loadLevel() {
+    switch (initialLevel) {
+      case 'Level1':
+        activeLevel = Level1(character: character);
+        break;
+      case 'Level2':
+        activeLevel = Level2(character: character);
+        break;
+      case 'Level3':
+        activeLevel = Level3(character: character);
+        break;
+      default:
+        activeLevel = Level1(character: character);
+    }
+    loadGame(activeLevel);
+  }
+
   Future<void> loadGame(Level level) async {
+    activeLevel.removeFromParent();
     cam = CameraComponent.withFixedResolution(
       world: level,
       width: 640,
@@ -74,6 +91,23 @@ class PlatFormerGameDev extends FlameGame
     player = level.children.whereType<Character>().first;
     playerReference = player;
     cam.follow(player);
+  }
+
+  void nextLevel() {
+    if (activeLevel is Level1) {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level2(character: character);
+    } else if (activeLevel is Level2) {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level3(character: character);
+    } else {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level1(character: character);
+    }
+    loadGame(activeLevel);
   }
 
   void resetGame() {
