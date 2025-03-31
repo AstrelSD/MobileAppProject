@@ -15,10 +15,9 @@ class Level extends World with HasCollisionDetection {
 
   Future<void> get ready => _completer.future;
 
-  @override
-  Future<void> onLoad() async {
+  Future<void> loadLevel() async {
     try {
-      level = await TiledComponent.load(activeLevel, Vector2.all(16));
+      level = await TiledComponent.load('$activeLevel', Vector2.all(16));
       add(level);
 
       final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');
@@ -28,15 +27,14 @@ class Level extends World with HasCollisionDetection {
 
       bool playerFound = false;
       for (final spawnPoint in spawnPointsLayer.objects) {
-        switch (spawnPoint.class_) {
-          case 'Player':
-            player = Character(
-              character: character,
-              position: Vector2(spawnPoint.x, spawnPoint.y),
-            );
-            add(player);
-            playerFound = true;
-            break;
+        if (spawnPoint.class_ == 'Player') {
+          player = Character(
+            character: character,
+            position: Vector2(spawnPoint.x, spawnPoint.y),
+          );
+          add(player);
+          playerFound = true;
+          break;
         }
       }
 
@@ -52,21 +50,29 @@ class Level extends World with HasCollisionDetection {
             size: Vector2(groundObj.width, groundObj.height),
           );
           add(ground);
+
+          ground.add(RectangleHitbox(
+            size: Vector2(groundObj.width, groundObj.height),
+            position: Vector2.zero(),
+            isSolid: true,
+          ));
         }
       }
 
       _completer.complete();
     } catch (e) {
       _completer.completeError(e);
+      rethrow;
     }
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await loadLevel();
+    return super.onLoad();
   }
 }
 
 class Ground extends PositionComponent with CollisionCallbacks {
-  Ground({required super.position, required super.size}) {
-    add(RectangleHitbox(
-      size: size,
-      position: Vector2.zero(),
-    ));
-  }
+  Ground({required super.position, required super.size});
 }

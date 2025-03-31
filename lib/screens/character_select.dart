@@ -9,93 +9,83 @@ class CharacterSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Map<String, String>> playerCharacters = [
       {
+        'name': 'Virtual Guy',
+        'image': 'assets/images/Main Characters/Virtual Guy/Idle (32x32).png',
+        'description': 'The default character with balanced abilities'
+      },
+      {
         'name': 'Male Character',
-        'image': 'assets/images/Main Characters/Male Character/Idle.png'
+        'image': 'assets/images/Main Characters/Male Character/Idle.png',
+        'description': 'Strong but slower movement'
       },
       {
         'name': 'Female Character',
-        'image': 'assets/images/Main Characters/Female Character/Idle.png'
+        'image': 'assets/images/Main Characters/Female Character/Idle.png',
+        'description': 'Fast but weaker jumps'
       },
     ];
 
     return Scaffold(
       body: Center(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Container(
-                color: Colors.lightBlue[50],
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.9,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.7),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Select Your Character',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            Center(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.9,
-                  maxHeight: MediaQuery.of(context).size.height * 0.8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  border: Border.all(
-                    width: 5,
-                    color: const Color.fromARGB(31, 0, 0, 0),
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Select Character',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+              const SizedBox(height: 20),
+              ...playerCharacters.map((character) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  child: ListTile(
+                    leading: Image.asset(
+                      character['image']!,
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.contain,
+                    ),
+                    title: Text(
+                      character['name']!,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                    subtitle: Text(
+                      character['description']!,
+                      style: const TextStyle(color: Colors.white70),
+                    ),
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GameScreen(
+                            initialLevel: 'level3',
+                            character: character['name']!,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        spacing: 20,
-                        runSpacing: 20,
-                        children: playerCharacters.map((character) {
-                          return Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  character['image']!,
-                                  width: 100, // Adjust image width
-                                  height: 120, // Adjust image height
-                                  fit: BoxFit.cover,
-                                ),
-                                const SizedBox(height: 10),
-                                MenuButton(
-                                  onPressed: () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => GameScreen(
-                                          initialLevel: 'level3',
-                                          character: character['name']!,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  text: 'Start Game!!',
-                                ),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-                    ],
+                      );
+                    },
+                    tileColor: Colors.blueGrey[800],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
-                ),
-              ),
-            ),
-          ],
+                );
+              }).toList(),
+            ],
+          ),
         ),
       ),
     );

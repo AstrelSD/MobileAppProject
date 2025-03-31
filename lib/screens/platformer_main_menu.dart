@@ -83,7 +83,6 @@ class PlatformerMainMenu extends StatelessWidget {
                 MenuButton(
                     text: 'Continue',
                     onPressed: () {
-                      // Navigate to the game screen
                     }),
                 SizedBox(height: 15),
                 MenuButton(
@@ -107,7 +106,6 @@ class PlatformerMainMenu extends StatelessWidget {
                 MenuButton(
                     text: 'Exit',
                     onPressed: () {
-                      // Exit the app
                     }),
               ],
             ),
