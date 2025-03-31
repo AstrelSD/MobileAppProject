@@ -1,26 +1,257 @@
 import 'dart:async';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/input.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
+import 'package:mobile_app_roject/levels/level_2.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
- 
-class PlatFormerGameDev extends FlameGame {
+import 'package:mobile_app_roject/screens/game_over_screen.dart';
+import 'package:mobile_app_roject/screens/game_hud.dart';
+import 'package:mobile_app_roject/screens/level_complete_screen.dart';
 
+class PlatFormerGameDev extends FlameGame
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        TapCallbacks,
+        HasCollisionDetection {
   late final CameraComponent cam;
   late final Level activeLevel;
-  
+  final String initialLevel;
+  final String character;
+  late Character player;
+
+  late final JoystickComponent joystick;
+  late final ButtonComponent jumpButton;
+  Character? playerReference;
+  bool usingKeyboard = false;
+  final keyboardKeysPressed = <LogicalKeyboardKey>{};
+
+  late GameHud hud;
+
+  PlatFormerGameDev({required this.initialLevel, required this.character});
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
-    activeLevel = Level3();
-    _loadGame(activeLevel);
+
+    overlays.addEntry('GameOver', (context, game) {
+      return GameOverScreen(
+        initialLevel: initialLevel,
+        character: character,
+      );
+    });
+
+    overlays.addEntry('LevelComplete', (context, game) {
+      return LevelCompleteScreen(
+        initialLevel: initialLevel,
+        character: character,
+      );
+    });
+    loadLevel();
+    debugMode = true;
+    hud = GameHud();
+    addJoystick();
+    addJumpButton();
     return super.onLoad();
   }
 
-  void _loadGame(Level level) {
-    level = activeLevel;
-    cam = CameraComponent.withFixedResolution(world: level, width: size.x, height: size.y);
-    cam.viewfinder.anchor = Anchor.topLeft;
-    addAll([cam, activeLevel]);
+  void loadLevel() {
+    switch (initialLevel) {
+      case 'Level1':
+        activeLevel = Level1(character: character);
+        break;
+      case 'Level2':
+        activeLevel = Level2(character: character);
+        break;
+      case 'Level3':
+        activeLevel = Level3(character: character);
+        break;
+      default:
+        activeLevel = Level1(character: character);
+    }
+    loadGame(activeLevel);
+  }
+
+  Future<void> loadGame(Level level) async {
+    activeLevel.removeFromParent();
+    cam = CameraComponent.withFixedResolution(
+      world: level,
+      width: 640,
+      height: 360,
+    );
+    cam.viewfinder.anchor = Anchor.center;
+    addAll([cam, level]);
+
+    await level.ready;
+    player = level.children.whereType<Character>().first;
+    playerReference = player;
+    cam.follow(player);
+  }
+
+  void nextLevel() {
+    if (activeLevel is Level1) {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level2(character: character);
+    } else if (activeLevel is Level2) {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level3(character: character);
+    } else {
+      activeLevel.removeFromParent();
+
+      activeLevel = Level1(character: character);
+    }
+    loadGame(activeLevel);
+  }
+
+  void resetGame() {
+    overlays.remove('GameOver');
+    loadGame(activeLevel);
+  }
+
+  void addJoystick() {
+    final knob = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Knob.png')),
+    )..size = Vector2.all(64);
+
+    final background = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Joystick.png')),
+    )..size = Vector2.all(150);
+
+    joystick = JoystickComponent(
+      knob: knob,
+      background: background,
+      margin: const EdgeInsets.only(left: 32, bottom: 32),
+    );
+
+    joystick.position = Vector2(100, size.y - 100);
+    add(joystick);
+  }
+
+  void addJumpButton() {
+    final button = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/JumpButton.png')),
+    )..size = Vector2.all(64);
+
+    jumpButton = ButtonComponent(
+      button: button,
+      position: Vector2(size.x - 100, size.y - 100),
+      onPressed: () {
+        if (playerReference != null && playerReference!.isOnGround) {
+          playerReference!.jump();
+        }
+      },
+    );
+    add(jumpButton);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    keyboardKeysPressed.clear();
+    keyboardKeysPressed.addAll(keysPressed);
+    usingKeyboard = keysPressed.isNotEmpty;
+
+    if (playerReference != null &&
+        playerReference!.isOnGround &&
+        (keysPressed.contains(LogicalKeyboardKey.space) ||
+            keysPressed.contains(LogicalKeyboardKey.keyW) ||
+            keysPressed.contains(LogicalKeyboardKey.arrowUp))) {
+      playerReference!.jump();
+    }
+
+    return KeyEventResult.handled;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+
+    if (playerReference == null) {
+      findPlayerReference();
+      return;
+    }
+
+    if (usingKeyboard) {
+      handleKeyboardMovement();
+    } else if (joystick.direction != JoystickDirection.idle) {
+      handleJoystickMovement();
+    } else {
+      playerReference!.stopMoving();
+    }
+  }
+
+  void handleKeyboardMovement() {
+    final isLeftKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
+
+    if (isLeftKeyPressed && isRightKeyPressed) {
+      playerReference!.stopMoving();
+    } else if (isLeftKeyPressed) {
+      playerReference!.moveLeft();
+    } else if (isRightKeyPressed) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
+      usingKeyboard = false;
+    }
+  }
+
+  void handleJoystickMovement() {
+    final delta = joystick.delta;
+
+    if (delta.x < -0.2) {
+      playerReference!.moveLeft();
+    } else if (delta.x > 0.2) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
+    }
+  }
+
+  void findPlayerReference() {
+    for (final component in activeLevel.children) {
+      if (component is Character) {
+        playerReference = component;
+        break;
+      }
+    }
+  }
+
+  @override
+  void onTapDown(TapDownEvent event) {
+    final tapPosition = event.canvasPosition;
+    final screenWidth = size.x;
+
+    if (tapPosition.x < screenWidth / 2) {
+      player.moveLeft();
+    } else {
+      player.moveRight();
+    }
+    super.onTapDown(event);
+  }
+
+  @override
+  void onTapUp(TapUpEvent event) {
+    player.stopMoving();
+    super.onTapUp(event);
+  }
+
+  @override
+  void onTapCancel(TapCancelEvent event) {
+    player.stopMoving();
+    super.onTapCancel(event);
   }
 }
