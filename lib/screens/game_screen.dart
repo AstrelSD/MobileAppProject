@@ -35,7 +35,7 @@ class _GameScreenState extends State<GameScreen> {
       body: Stack(
         children: [
           GameWidget(
-            game: PlatFormerGameDev(character: character),
+            game: game,
           ),
           Positioned(
             top: 40,
