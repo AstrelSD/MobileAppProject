@@ -83,7 +83,7 @@ class CharacterSelect extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
             ],
           ),
         ),

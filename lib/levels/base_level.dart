@@ -17,7 +17,7 @@ class Level extends World with HasCollisionDetection {
 
   Future<void> loadLevel() async {
     try {
-      level = await TiledComponent.load('$activeLevel', Vector2.all(16));
+      level = await TiledComponent.load(activeLevel, Vector2.all(16));
       add(level);
 
       final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('object1');

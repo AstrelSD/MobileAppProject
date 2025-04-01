@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/collisions.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
