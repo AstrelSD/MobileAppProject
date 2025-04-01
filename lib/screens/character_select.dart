@@ -15,12 +15,12 @@ class CharacterSelect extends StatelessWidget {
       },
       {
         'name': 'Male Character',
-        'image': 'assets/images/Main Characters/Male Character/Idle.png',
+        'image': 'assets/images/Main Characters/Male Character/Idle2.png',
         'description': 'Strong but slower movement'
       },
       {
         'name': 'Female Character',
-        'image': 'assets/images/Main Characters/Female Character/Idle.png',
+        'image': 'assets/images/Main Characters/Female Character/Idle2.png',
         'description': 'Fast but weaker jumps'
       },
     ];

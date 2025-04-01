@@ -47,8 +47,8 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   }
 
   Future<void> _loadCharacterAnimations() async {
-    idleAnimation = await _loadAsepriteAnimation('Idle', 11);
-    runningAnimation = await _loadAsepriteAnimation('Run', 12);
+    idleAnimation = await _loadAsepriteAnimation('Idle', 1);
+    runningAnimation = await _loadAsepriteAnimation('Run', 4);
     jumpAnimation = await _loadAsepriteAnimation('Jump', 1);
 
     animations = {
@@ -61,7 +61,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   Future<SpriteAnimation> _loadAsepriteAnimation(
       String state, int amount) async {
     return SpriteAnimation.fromFrameData(
-      await game.images.load('Main Characters/$character/$state (32x32).png'),
+      await game.images.load('Main Characters/$character/$state.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
