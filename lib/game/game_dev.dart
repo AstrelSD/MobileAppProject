@@ -14,7 +14,8 @@ import 'package:mobile_app_roject/screens/game_over_screen.dart';
 
 class PlatFormerGameDev extends FlameGame 
     with HasCollisionDetection, TapCallbacks, DragCallbacks, KeyboardEvents {
-  late final CameraComponent cam;
+  
+  late final CameraComponent cam; // Camera for the world
   late final Level activeLevel;
   final String initialLevel;
   final String character;
@@ -54,7 +55,6 @@ class PlatFormerGameDev extends FlameGame
         character: character,
       );
     });
-
 
     _joystickBackground = await Sprite.load('HUD/Joystick.png');
     _joystickKnob = await Sprite.load('HUD/Knob.png');
@@ -205,18 +205,21 @@ class PlatFormerGameDev extends FlameGame
   }
 
   Future<void> _loadGame(Level level) async {
-    cam = CameraComponent.withFixedResolution(
-      world: level,
-      width: 640,
-      height: 360,
-    );
-    cam.viewfinder.anchor = Anchor.center;
-    addAll([cam, level]);
+  cam = CameraComponent.withFixedResolution(
+    world: level,
+    width: 640,
+    height: 360,
+  );
+  
+  cam.viewfinder.anchor = Anchor.topLeft; // Set camera anchor to top-left
+  addAll([cam, level]);
 
-    await level.ready;
-    player = level.children.whereType<Character>().first;
-    cam.follow(player);
-  }
+  await level.ready;
+
+  player = level.player; // Get the player from the level
+  
+  cam.follow(player);
+}
 
   void resetGame() {
     overlays.remove('GameOver');
