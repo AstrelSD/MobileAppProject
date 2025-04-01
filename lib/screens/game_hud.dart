@@ -1,23 +1,37 @@
-import 'package:flame/components.dart';
-import 'package:flame/extensions.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/game/game_dev.dart';
 
-class GameHud extends PositionComponent {
-  int health = 3;
-  
+class GameHud extends StatelessWidget {
+  final PlatFormerGameDev gameRef;
+
+  const GameHud({
+    super.key,
+    required this.gameRef,
+  });
+
   @override
-  Future<void> onLoad() async {
-    final healthText = TextComponent(
-      text: 'Health: $health',
-      position: Vector2(20, 20),
-      textRenderer: TextPaint(
-        style: const TextStyle(
-          fontSize: 24,
-          color: Color.fromARGB(255, 235, 225, 225),
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 20,
+      right: 20,
+      child: GestureDetector(
+        onTap: () => gameRef.togglePause(),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Text(
+            'II',
+            style: TextStyle(
+              fontSize: 24,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );
-    add(healthText);
   }
 }

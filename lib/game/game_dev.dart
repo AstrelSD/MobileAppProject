@@ -11,15 +11,16 @@ import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
+import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
 
-class PlatFormerGameDev extends FlameGame 
+class PlatFormerGameDev extends FlameGame
     with HasCollisionDetection, TapCallbacks, DragCallbacks, KeyboardEvents {
   late final CameraComponent cam;
   late final Level activeLevel;
   final String initialLevel;
   final String character;
   late Character player;
-  
+
   late Sprite _joystickBackground;
   late Sprite _joystickKnob;
   late Vector2 _joystickPosition;
@@ -27,20 +28,25 @@ class PlatFormerGameDev extends FlameGame
   late double _knobRadius;
   Vector2 _joystickDelta = Vector2.zero();
   bool _isDragging = false;
-  
+
   late Sprite _jumpButton;
   late Vector2 _jumpButtonPosition;
   late double _jumpButtonSize;
   bool _isJumpPressed = false;
 
   final Set<LogicalKeyboardKey> _pressedKeys = {};
-  bool get isLeftPressed => _pressedKeys.contains(LogicalKeyboardKey.keyA) || 
-                          _pressedKeys.contains(LogicalKeyboardKey.arrowLeft);
-  bool get isRightPressed => _pressedKeys.contains(LogicalKeyboardKey.keyD) || 
-                           _pressedKeys.contains(LogicalKeyboardKey.arrowRight);
-  bool get isJumpPressed => _pressedKeys.contains(LogicalKeyboardKey.keyW) || 
-                          _pressedKeys.contains(LogicalKeyboardKey.arrowUp) || 
-                          _pressedKeys.contains(LogicalKeyboardKey.space);
+  bool get isLeftPressed =>
+      _pressedKeys.contains(LogicalKeyboardKey.keyA) ||
+      _pressedKeys.contains(LogicalKeyboardKey.arrowLeft);
+  bool get isRightPressed =>
+      _pressedKeys.contains(LogicalKeyboardKey.keyD) ||
+      _pressedKeys.contains(LogicalKeyboardKey.arrowRight);
+  bool get isJumpPressed =>
+      _pressedKeys.contains(LogicalKeyboardKey.keyW) ||
+      _pressedKeys.contains(LogicalKeyboardKey.arrowUp) ||
+      _pressedKeys.contains(LogicalKeyboardKey.space);
+
+  bool isPaused = false;
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
 
@@ -55,6 +61,13 @@ class PlatFormerGameDev extends FlameGame
       );
     });
 
+    overlays.addEntry('Pause', (context, game) {
+      return PauseOverlay(
+        onResume: resumeGame,
+        onRestart: restartGame,
+        onSave: saveGame,
+      );
+    });
 
     _joystickBackground = await Sprite.load('HUD/Joystick.png');
     _joystickKnob = await Sprite.load('HUD/Knob.png');
@@ -63,7 +76,7 @@ class PlatFormerGameDev extends FlameGame
     _joystickRadius = 50;
     _knobRadius = 25;
     _joystickPosition = Vector2(100, size.y - 100);
-    
+
     _jumpButtonSize = 80;
     _jumpButtonPosition = Vector2(size.x - 100, size.y - 100);
 
@@ -77,20 +90,20 @@ class PlatFormerGameDev extends FlameGame
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    
+
     _joystickBackground.render(
       canvas,
       position: _joystickPosition - Vector2.all(_joystickRadius),
       size: Vector2.all(_joystickRadius * 2),
     );
-    
+
     final knobPosition = _joystickPosition + _joystickDelta;
     _joystickKnob.render(
       canvas,
       position: knobPosition - Vector2.all(_knobRadius),
       size: Vector2.all(_knobRadius * 2),
     );
-    
+
     _jumpButton.render(
       canvas,
       position: _jumpButtonPosition - Vector2.all(_jumpButtonSize / 2),
@@ -100,29 +113,31 @@ class PlatFormerGameDev extends FlameGame
 
   @override
   void update(double dt) {
-    if (isLeftPressed) {
-      player.moveLeft();
-    } else if (isRightPressed) {
-      player.moveRight();
-    } else if (!_isDragging) {
-      player.stopMoving();
-    }
-
-    if (isJumpPressed) {
-      player.jump();
-    }
-
-    if (_isDragging) {
-      final direction = _joystickDelta.normalized();
-      if (direction.x < -0.5) {
+    if (!isPaused) {
+      if (isLeftPressed) {
         player.moveLeft();
-      } else if (direction.x > 0.5) {
+      } else if (isRightPressed) {
         player.moveRight();
+      } else if (!_isDragging) {
+        player.stopMoving();
       }
-    }
 
-    if (_isJumpPressed) {
-      player.jump();
+      if (isJumpPressed) {
+        player.jump();
+      }
+
+      if (_isDragging) {
+        final direction = _joystickDelta.normalized();
+        if (direction.x < -0.5) {
+          player.moveLeft();
+        } else if (direction.x > 0.5) {
+          player.moveRight();
+        }
+      }
+
+      if (_isJumpPressed) {
+        player.jump();
+      }
     }
 
     super.update(dt);
@@ -133,9 +148,43 @@ class PlatFormerGameDev extends FlameGame
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
+    if (event is KeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.escape) {
+        togglePause();
+        return KeyEventResult.handled;
+      }
+    }
+
     _pressedKeys.clear();
     _pressedKeys.addAll(keysPressed);
     return KeyEventResult.handled;
+  }
+
+  void togglePause() {
+    isPaused = !isPaused;
+    if (isPaused) {
+      overlays.add('Pause');
+    } else {
+      overlays.remove('Pause');
+    }
+  }
+
+  void resumeGame() {
+    isPaused = false;
+    overlays.remove('Pause');
+  }
+
+  void restartGame() {
+    isPaused = false;
+    overlays.remove('Pause');
+    overlays.remove('GameOver');
+    _loadGame(activeLevel);
+  }
+
+  void saveGame() {
+    // Implement your save game logic here
+    print('Game saved!');
+    // Example: Save player position, level progress, etc
   }
 
   @override
@@ -145,7 +194,7 @@ class PlatFormerGameDev extends FlameGame
       width: _jumpButtonSize,
       height: _jumpButtonSize,
     );
-    
+
     if (jumpButtonArea.contains(event.localPosition.toOffset())) {
       _isJumpPressed = true;
     }
@@ -171,7 +220,7 @@ class PlatFormerGameDev extends FlameGame
       width: _joystickRadius * 2,
       height: _joystickRadius * 2,
     );
-    
+
     if (joystickArea.contains(event.localPosition.toOffset())) {
       _isDragging = true;
       _updateJoystickDelta(event.localPosition);
@@ -216,10 +265,5 @@ class PlatFormerGameDev extends FlameGame
     await level.ready;
     player = level.children.whereType<Character>().first;
     cam.follow(player);
-  }
-
-  void resetGame() {
-    overlays.remove('GameOver');
-    _loadGame(activeLevel);
   }
 }

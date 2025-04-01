@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
+import 'package:mobile_app_roject/screens/game_hud.dart';
 
 class GameScreen extends StatefulWidget {
   final String initialLevel;
@@ -31,8 +32,13 @@ class _GameScreenState extends State<GameScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GameWidget(
-        game: game,
+      body: Stack(
+        children: [
+          GameWidget(
+            game: game,
+          ),
+          GameHud(gameRef: game),
+        ],
       ),
     );
   }
