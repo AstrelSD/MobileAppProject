@@ -100,14 +100,18 @@ class _PauseOverlayState extends State<PauseOverlay> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   _buildPauseButton(Icons.play_arrow, 'Continue', Colors.green, widget.onResume),
+                  const SizedBox(width: 40),
                   _buildPauseButton(Icons.refresh, 'Restart', Colors.orange, widget.onRestart),
+                  const SizedBox(width: 40),
                   _buildPauseButton(Icons.save, 'Save', Colors.purple, _saveGame),
+                  const SizedBox(width: 40),
                   _buildPauseButton(
                     Icons.settings,
                     'Settings',
                     Colors.blue,
                     () => showDialog(context: context, builder: (_) => const SettingsOverlay()),
                   ),
+                  const SizedBox(width: 40),
                   _buildPauseButton(Icons.home, 'Home', Colors.red, () {
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const PlatformerMainMenu()));
                   }),
@@ -127,7 +131,14 @@ class _PauseOverlayState extends State<PauseOverlay> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _selectedSlot == index + 1 ? Colors.green : Colors.grey,
                       ),
-                      child: Text('Slot ${index + 1}'),
+                      child: Text('Slot ${index + 1}',
+                        style: TextStyle(
+                          color: _selectedSlot == index + 1 ? Colors.white : Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'PixelFont',
+                        ),
+                      ),
                     ),
                   );
                 }),
@@ -143,7 +154,8 @@ class _PauseOverlayState extends State<PauseOverlay> {
     return Column(
       children: [
         IconButton(iconSize: 50, icon: Icon(icon, color: color), onPressed: onPressed),
-        Text(label, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.bold)),
+        Text(label, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'PixelFont')),
+        const SizedBox(height: 10),
       ],
     );
   }
