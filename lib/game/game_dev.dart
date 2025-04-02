@@ -85,11 +85,6 @@ class PlatFormerGameDev extends FlameGame
     });
   }
 
-    // Add a light blue background
-    add(RectangleComponent(
-      size: size, // Fill the entire screen
-      paint: Paint()..color = const Color(0xFFB3E5FC), // Light blue color
-    ));
   Future<void> loadGame(Level level) async {
     overlays.clear();
 
