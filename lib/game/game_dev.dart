@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
-import 'package:mobile_app_roject/levels/level_3.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
 import 'package:mobile_app_roject/screens/level_complete_screen.dart';
@@ -51,11 +51,13 @@ class PlatFormerGameDev extends FlameGame
       );
     });
 
-    activeLevel = Level3(character: character);
+    activeLevel = Level1(character: character);
     await loadGame(activeLevel);
 
     debugMode = true;
     hud = GameHud();
+    add(hud);  // <-- Add the HUD to the game component tree
+
     addJoystick();
     addJumpButton();
     return super.onLoad();

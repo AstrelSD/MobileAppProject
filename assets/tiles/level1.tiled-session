@@ -26,11 +26,14 @@
             "scaleInDock": 1
         },
         "Terrain 2.tsx": {
-            "scaleInDock": 0.1118
+            "scaleInDock": 0.5155
         },
         "level1 tileset 2.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5524,
             "scaleInEditor": 1
+        },
+        "level1 tileset.tsx": {
+            "scaleInDock": 1
         },
         "level1 tileset2.tsx": {
             "scaleInDock": 0.9868,
@@ -48,7 +51,7 @@
             }
         },
         "level1_road_signs.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 1.5323,
             "scaleInEditor": 1
         }
     },
