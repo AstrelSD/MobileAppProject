@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
@@ -51,7 +52,7 @@ class PlatFormerGameDev extends FlameGame
       );
     });
 
-    activeLevel = Level3(character: character);
+    activeLevel = Level1(character: character);
     await loadGame(activeLevel);
 
     debugMode = true;
