@@ -158,21 +158,27 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen>
                     ),
                   ),
                   const SizedBox(height: 40),
+                  // "Next Level" button only shows if initialLevel < 3
                   _buildAnimatedButton(
-                    'Next Level',
+                    widget.initialLevel == '3'
+                        ? 'You Completed All Levels'
+                        : 'Next Level',
                     _isHoveringNext,
                     Colors.orange[700]!,
-                    () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => GameScreen(
-                            initialLevel: widget.initialLevel,
-                            character: widget.character,
-                          ),
-                        ),
-                      );
-                    },
+                    widget.initialLevel == '3'
+                        ? () {} // Do nothing, or show a dialog if needed
+                        : () {
+                            int nextLevel = int.parse(widget.initialLevel) + 1;
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GameScreen(
+                                  initialLevel: nextLevel.toString(),
+                                  character: widget.character,
+                                ),
+                              ),
+                            );
+                          },
                     onHover: (hovering) {
                       setState(() => _isHoveringNext = hovering);
                     },
