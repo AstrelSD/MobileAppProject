@@ -26,7 +26,7 @@ class MenuButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontFamily: 'PixelFont',
