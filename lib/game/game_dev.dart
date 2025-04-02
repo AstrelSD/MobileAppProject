@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 
@@ -67,7 +68,7 @@ class PlatFormerGameDev extends FlameGame
     _jumpButtonSize = 80;
     _jumpButtonPosition = Vector2(size.x - 100, size.y - 100);
 
-    activeLevel = Level3(character: character);
+    activeLevel = Level1(character: character);
     await _loadGame(activeLevel);
 
     debugMode = true;
