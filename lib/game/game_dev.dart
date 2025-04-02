@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
@@ -33,6 +34,7 @@ class PlatFormerGameDev extends FlameGame
   late GameHud hud;
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
+
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
@@ -51,13 +53,20 @@ class PlatFormerGameDev extends FlameGame
       );
     });
 
-    activeLevel = Level3(character: character);
-    await loadGame(activeLevel);
+    // Add a light blue background
+    add(RectangleComponent(
+      size: size, // Fill the entire screen
+      paint: Paint()..color = const Color(0xFFB3E5FC), // Light blue color
+    ));
 
-    debugMode = true;
     hud = GameHud();
     addJoystick();
     addJumpButton();
+
+    activeLevel = Level1(character: character);
+    await loadGame(activeLevel);
+
+    debugMode = false;
     return super.onLoad();
   }
 

@@ -67,7 +67,7 @@ class CharacterSelect extends StatelessWidget {
                                 Image.asset(
                                   character['image']!,
                                   width: 100, 
-                                  height: 120, 
+                                  height: 150, 
                                   fit: BoxFit.cover,
                                 ),
                                 const SizedBox(height: 10),
@@ -83,7 +83,7 @@ class CharacterSelect extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  text: 'Start Game!!',
+                                  text: 'Start Game',
                                 ),
                               ],
                             ),

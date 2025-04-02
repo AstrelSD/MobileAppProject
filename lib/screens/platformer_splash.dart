@@ -16,7 +16,6 @@ class PlatformerSplash extends StatelessWidget {
             child: Image.asset("assets/images/Forest.png"),
           ),
           const SizedBox(height: 20),
-          const CircularProgressIndicator(),
         ],
       ),
       nextScreen: PlatformerMainMenu(),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/character_select.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
   const PlatformerMainMenu({super.key});
@@ -80,10 +82,7 @@ class PlatformerMainMenu extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                MenuButton(
-                    text: 'Continue',
-                    onPressed: () {
-                    }),
+                MenuButton(text: 'Continue', onPressed: () {}),
                 SizedBox(height: 15),
                 MenuButton(
                     text: 'New Game',
@@ -95,17 +94,19 @@ class PlatformerMainMenu extends StatelessWidget {
                     }),
                 SizedBox(height: 15),
                 MenuButton(
-                  text: 'Settings',
-                  onPressed:  () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => const SettingsOverlay(),
-                  );
-                }),
+                    text: 'Settings',
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const SettingsOverlay(),
+                      );
+                    }),
                 SizedBox(height: 15),
                 MenuButton(
                     text: 'Exit',
                     onPressed: () {
+                      SystemNavigator.pop(); // Works for Android
+                      exit(0); // For iOS
                     }),
               ],
             ),
