@@ -110,12 +110,32 @@ class PlatFormerGameDev extends FlameGame
   }
 
   /// Resets the game and reloads the level
-  void resetGame() {
-    overlays.remove('GameOver');
-    overlays.remove('LevelComplete');
-    remove(activeLevel);
-    loadGame(activeLevel);
-  }
+void resetGame() {
+  // Remove only non-essential components like obstacles, enemies, etc.
+  overlays.remove('GameOver');
+  overlays.remove('LevelComplete');
+  
+  // If you have a collection of non-player components, you can remove them selectively
+  // e.g. removeAllObstacles() or removeAllEnemies() if you have such methods
+
+  // Reset the player position and any other properties
+  //player.position = initialPlayerPosition; // Reset the player position
+  //player.resetHealth(); // If you have a health or state reset for the player
+  
+  // Optionally reset the game state (score, coins, etc.)
+  score = 0;
+  coins = 0;
+  coconut = 0;
+  lives = 3;
+
+  // Reload the active level (or reset any level-specific data)
+  loadGame(activeLevel);
+
+  // Add the player back to the game (if needed)
+  add(player);
+  
+  // Optionally, you can also reset any additional elements like UI states or game timers
+}
 
   /// Saves the current game state
   Future<void> saveGame(int slot) async {

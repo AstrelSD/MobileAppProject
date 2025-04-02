@@ -3,6 +3,7 @@ import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 import 'package:mobile_app_roject/services/save_manager.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
+import 'package:mobile_app_roject/screens/game_screen.dart';
 
 class PauseOverlay extends StatefulWidget {
   final VoidCallback onResume;
@@ -14,7 +15,7 @@ class PauseOverlay extends StatefulWidget {
   final int coconut;
   final int lives;
   final String character;
-  final SaveManager saveManager; 
+  final SaveManager saveManager;
 
   PauseOverlay({
     super.key,
@@ -26,8 +27,8 @@ class PauseOverlay extends StatefulWidget {
     required this.coins,
     required this.coconut,
     required this.lives,
-    required this.character, 
-    required this.saveManager, 
+    required this.character,
+    required this.saveManager,
   });
 
   @override
@@ -40,13 +41,13 @@ class _PauseOverlayState extends State<PauseOverlay> {
   bool _isHoveringSettings = false;
   bool _isHoveringHome = false;
   bool _isHoveringSave = false;
-  
-  late int _selectedSlot; 
+
+  late int _selectedSlot;
 
   @override
   void initState() {
     super.initState();
-    _selectedSlot = 1; 
+    _selectedSlot = 1;
   }
 
   void _saveGame() async {
@@ -57,7 +58,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
       coconut: widget.coconut,
       character: widget.character,
       lives: widget.lives,
-      timestamp: DateTime.now().toUtc() 
+      timestamp: DateTime.now().toUtc(),
     );
 
     await widget.saveManager.saveGame(_selectedSlot, gameState);
@@ -65,6 +66,27 @@ class _PauseOverlayState extends State<PauseOverlay> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Game saved in Slot $_selectedSlot')),
     );
+  }
+
+  // void _resetGame() {
+  //   widget.onRestart(); // Call the restart function passed from the parent
+  //   Navigator.pop(context); // Close the PauseOverlay
+  // }
+  void _restartGame() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameScreen(
+          initialLevel: widget.level.toString(), // You can pass the level as a string
+          character: widget.character,
+        ),
+      ),
+    );
+  }
+
+  void _resumeGame() {
+    widget.onResume(); // Call the resume function passed from the parent
+    Navigator.pop(context); // Close the PauseOverlay
   }
 
   @override
@@ -99,9 +121,9 @@ class _PauseOverlayState extends State<PauseOverlay> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildPauseButton(Icons.play_arrow, 'Continue', Colors.green, widget.onResume),
+                  _buildPauseButton(Icons.play_arrow, 'Continue', Colors.green, _resumeGame),
                   const SizedBox(width: 40),
-                  _buildPauseButton(Icons.refresh, 'Restart', Colors.orange, widget.onRestart),
+                  _buildPauseButton(Icons.refresh, 'Restart', Colors.orange, _restartGame),
                   const SizedBox(width: 40),
                   _buildPauseButton(Icons.save, 'Save', Colors.purple, _saveGame),
                   const SizedBox(width: 40),
