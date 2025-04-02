@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/character_select.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
+import 'package:mobile_app_roject/screens/load_game_menu.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
   const PlatformerMainMenu({super.key});
@@ -81,8 +82,12 @@ class PlatformerMainMenu extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 MenuButton(
-                    text: 'Continue',
+                    text: 'Load Game',
                     onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => LoadGameMenu()));
                     }),
                 SizedBox(height: 15),
                 MenuButton(

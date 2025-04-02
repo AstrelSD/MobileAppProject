@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
+import 'package:mobile_app_roject/services/save_manager.dart';  // Import SaveManager
+import 'package:mobile_app_roject/models/game_state.dart';  // Import GameState model
 
 class PauseOverlay extends StatefulWidget {
   final VoidCallback onResume;
   final VoidCallback onRestart;
   final VoidCallback onSave;
+  final int level;
+  final int score;
+  final int coins;
+  final int gold;
+  final int lives;
 
   const PauseOverlay({
     super.key,
     required this.onResume,
     required this.onRestart,
     required this.onSave,
+    required this.level,
+    required this.score,
+    required this.coins,
+    required this.gold,
+    required this.lives,
   });
 
   @override
@@ -24,6 +36,43 @@ class _PauseOverlayState extends State<PauseOverlay> {
   bool _isHoveringSettings = false;
   bool _isHoveringHome = false;
   bool _isHoveringSave = false;
+  int selectedSlot = 1; // To track the selected save slot
+
+  final SaveManager _saveManager = SaveManager(); // Instance of SaveManager
+
+  // Save the game to Firestore
+  void _saveGame() async {
+    // Create a GameState object with actual game data
+    GameState gameState = GameState(
+      level: widget.level,
+      score: widget.score,
+      coins: widget.coins,
+      gold: widget.gold,
+      lives: widget.lives,
+    );
+
+    // Save game data to the selected slot
+    await _saveManager.saveGame(selectedSlot, gameState);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Game saved in Slot $selectedSlot')),
+    );
+  }
+
+  // Load the game from a specific slot (optional for future use)
+  void _loadGame() async {
+    GameState? loadedGame = await _saveManager.loadGame(selectedSlot);
+    if (loadedGame != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Loaded Slot $selectedSlot')),
+      );
+      // You can also update the game state here based on the loaded data
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No save data in Slot $selectedSlot')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +138,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
                       'Save',
                       _isHoveringSave,
                       Colors.purple,
-                      widget.onSave,
+                      _saveGame, // Save game action
                       onHover: (hovering) {
                         setState(() => _isHoveringSave = hovering);
                       },
@@ -129,6 +178,28 @@ class _PauseOverlayState extends State<PauseOverlay> {
                       },
                     ),
                   ],
+                ),
+                const SizedBox(height: 20),
+                // Save Slot Selection Buttons
+                Text('Select Save Slot:', style: TextStyle(color: Colors.white, fontSize: 18)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(3, (index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedSlot = index + 1;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: selectedSlot == index + 1 ? Colors.green : Colors.grey,
+                        ),
+                        child: Text('Slot ${index + 1}'),
+                      ),
+                    );
+                  }),
                 ),
               ],
             ),

@@ -12,6 +12,7 @@ import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
+import 'package:mobile_app_roject/models/game_state.dart';  
 
 class PlatFormerGameDev extends FlameGame
     with HasCollisionDetection, TapCallbacks, DragCallbacks, KeyboardEvents {
@@ -47,6 +48,13 @@ class PlatFormerGameDev extends FlameGame
       _pressedKeys.contains(LogicalKeyboardKey.space);
 
   bool isPaused = false;
+  GameState gameState = GameState(
+    level: 1,
+    score: 0,
+    coins: 0,
+    gold: 0,
+    lives: 3,
+  );
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
 
@@ -62,12 +70,17 @@ class PlatFormerGameDev extends FlameGame
     });
 
     overlays.addEntry('Pause', (context, game) {
-      return PauseOverlay(
-        onResume: resumeGame,
-        onRestart: restartGame,
-        onSave: saveGame,
-      );
-    });
+  return PauseOverlay(
+    onResume: resumeGame,
+    onRestart: restartGame,
+    onSave: saveGame,
+    level: gameState.level,  // Pass current level from game state
+    score: gameState.score,  // Pass current score from game state
+    coins: gameState.coins,  // Pass current coins from game state
+    gold: gameState.gold,    // Pass current gold from game state
+    lives: gameState.lives,  // Pass current lives from game state
+  );
+});
 
     _joystickBackground = await Sprite.load('HUD/Joystick.png');
     _joystickKnob = await Sprite.load('HUD/Knob.png');
