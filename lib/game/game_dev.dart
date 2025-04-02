@@ -13,201 +13,233 @@ import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
 import 'package:mobile_app_roject/screens/level_complete_screen.dart';
-import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
 import 'package:mobile_app_roject/services/save_manager.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 
 class PlatFormerGameDev extends FlameGame
-    with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, HasCollisionDetection {
-  CameraComponent? cam; // Changed to nullable
+    with
+        HasKeyboardHandlerComponents,
+        DragCallbacks,
+        TapCallbacks,
+        HasCollisionDetection {
+  late final CameraComponent cam;
   late Level activeLevel;
   final String initialLevel;
   final String character;
   late Character player;
+  int score = 0;
+  int coins = 0;
+  int coconut = 0;
+  int lives = 3;
+
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
   Character? playerReference;
   bool usingKeyboard = false;
   final keyboardKeysPressed = <LogicalKeyboardKey>{};
-  late GameHud hud;
-  late SaveManager saveManager;
 
-  int currentLevel = 1;
-  int score = 0;
-  int coins = 0;
-  int coconut = 0;
-  int lives = 3;
-  int selectedSaveSlot = 1;
+  late GameHud hud;
+  final SaveManager saveManager = SaveManager();
+
+  /// Getter for the current level
+  String get currentLevel => activeLevel.levelName;
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
 
   @override
-  Future<void> onLoad() async {
-    saveManager = SaveManager();
+  FutureOr<void> onLoad() async {
     await images.loadAllImages();
-    currentLevel = int.tryParse(initialLevel.replaceAll('level_', '')) ?? 1;
 
-    _initializeOverlays();
-
-    activeLevel = Level3(character: character);
-    await loadGame(activeLevel);
-
-    debugMode = true;
-    hud = GameHud();
-    add(hud);
-    addJoystick();
-    addJumpButton();
-  }
-
-  void _initializeOverlays() {
     overlays.addEntry('GameOver', (context, game) {
-      return GameOverScreen(initialLevel: initialLevel, character: character);
+      return GameOverScreen(
+        initialLevel: initialLevel,
+        character: character,
+      );
     });
 
     overlays.addEntry('LevelComplete', (context, game) {
-      return LevelCompleteScreen(initialLevel: initialLevel, character: character);
-    });
-
-    overlays.addEntry('PauseOverlay', (context, game) {
-      return PauseOverlay(
-        onResume: resumeGame,
-        onRestart: resetGame,
-        onSave: saveGame,
-        level: currentLevel,
-        score: score,
-        coins: coins,
-        coconut: coconut,
-        lives: lives,
+      return LevelCompleteScreen(
+        initialLevel: initialLevel,
         character: character,
-        saveManager: saveManager,
       );
     });
+
+    add(RectangleComponent(
+      size: size,
+      paint: Paint()..color = const Color(0xFFB3E5FC),
+    ));
+
+    hud = GameHud();
+    add(hud);
+
+    addJoystick();
+    addJumpButton();
+
+    activeLevel = await loadLevel(initialLevel);
+    await loadGame(activeLevel);
+
+    debugMode = false;
+    return super.onLoad();
+  }
+
+  Future<Level> loadLevel(String level) async {
+    if (level == '1') {
+      return Level1(character: character);
+    } else if (level == '2') {
+      return Level2(character: character);
+    } else {
+      return Level3(character: character);
+    }
   }
 
   Future<void> loadGame(Level level) async {
-    overlays.clear();
-
-    hud = GameHud();
-    add(hud);  
-    if (cam != null) {
-      cam!.removeFromParent();
-    }
-    if (playerReference != null) {
-      playerReference!.removeFromParent();
-    }
-    if (activeLevel.isMounted) {
-      activeLevel.removeFromParent();
-    }
-
     activeLevel = level;
-    player = Character(character: character, position: Vector2(100, 200));
+
+    cam = CameraComponent.withFixedResolution(
+      world: activeLevel,
+      width: 640,
+      height: 360,
+    );
+    cam.viewfinder.anchor = Anchor.center;
+    addAll([cam, activeLevel]);
+
+    await activeLevel.ready;
+    player = activeLevel.children.whereType<Character>().first;
     playerReference = player;
-
-    cam = CameraComponent.withFixedResolution(width: 800, height: 600)
-      ..viewfinder.anchor = Anchor.topLeft
-      ..follow(player);
-
-    world.add(activeLevel);
-    world.add(player);
-    add(cam!);
+    cam.follow(player);
   }
 
-  Future<void> saveGame() async {
-    final gameState = GameState(
-      level: currentLevel,
+  /// Resets the game and reloads the level
+  void resetGame() {
+    overlays.remove('GameOver');
+    overlays.remove('LevelComplete');
+    remove(activeLevel);
+    loadGame(activeLevel);
+  }
+
+  /// Saves the current game state
+  Future<void> saveGame(int slot) async {
+    await saveManager.saveGame(slot, GameState(
+      level: int.parse(activeLevel.levelName),
       score: score,
       coins: coins,
       coconut: coconut,
       lives: lives,
       character: character,
-      timestamp: DateTime.now().toUtc(),
-    );
-    await saveManager.saveGame(selectedSaveSlot, gameState);
+      timestamp: DateTime.now().toUtc(), // Save the current timestamp
+    ));
   }
-
-  void pauseGame() {
-    pauseEngine();
-    overlays.add('PauseOverlay');
-  }
-
-  void resumeGame() {
-    resumeEngine();
-    overlays.remove('PauseOverlay');
-  }
-
-  void resetGame() {
-    overlays.remove('PauseOverlay');
-    overlays.remove('GameOver');
-    overlays.remove('LevelComplete');
-    loadGame(activeLevel);
-  }
-
   void addJoystick() {
+    final knob = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Knob.png')),
+    )..size = Vector2.all(64);
+
+    final background = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/Joystick.png')),
+    )..size = Vector2.all(150);
+
     joystick = JoystickComponent(
-      knob: CircleComponent(radius: 30, paint: Paint()..color = Colors.blue),
-      background: CircleComponent(radius: 50, paint: Paint()..color = Colors.grey),
-      margin: const EdgeInsets.only(left: 20, bottom: 20),
-      position: Vector2(100, size.y - 100),
+      knob: knob,
+      background: background,
+      margin: const EdgeInsets.only(left: 32, bottom: 32),
     );
+
+    joystick.position = Vector2(100, size.y - 100);
     add(joystick);
   }
 
   void addJumpButton() {
+    final button = SpriteComponent(
+      sprite: Sprite(images.fromCache('HUD/JumpButton.png')),
+    )..size = Vector2.all(64);
+
     jumpButton = ButtonComponent(
-      button: CircleComponent(radius: 30, paint: Paint()..color = Colors.green),
+      button: button,
       position: Vector2(size.x - 100, size.y - 100),
-      onPressed: () => player.jump(),
+      onPressed: () {
+        if (playerReference != null && playerReference!.isOnGround) {
+          playerReference!.jump();
+        }
+      },
     );
     add(jumpButton);
   }
 
-  Future<void> loadSavedProgress(GameState savedState) async {
-    currentLevel = savedState.level;
-    score = savedState.score;
-    coins = savedState.coins;
-    coconut = savedState.coconut;
-    lives = savedState.lives;
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    keyboardKeysPressed.clear();
+    keyboardKeysPressed.addAll(keysPressed);
+    usingKeyboard = keysPressed.isNotEmpty;
 
-    await loadLevelBasedOnSavedState(savedState.level);
-  }
-
-  Future<void> loadLevelBasedOnSavedState(int level) async {
-    Level newLevel;
-    if (level == 1) {
-      newLevel = Level1(character: character);
-    } else if (level == 2) {
-      newLevel = Level2(character: character);
-    } else {
-      newLevel = Level3(character: character);
+    if (playerReference != null &&
+        playerReference!.isOnGround &&
+        (keysPressed.contains(LogicalKeyboardKey.space) ||
+            keysPressed.contains(LogicalKeyboardKey.keyW) ||
+            keysPressed.contains(LogicalKeyboardKey.arrowUp))) {
+      playerReference!.jump();
     }
 
-    await loadGame(newLevel);
+    return KeyEventResult.handled;
   }
 
   @override
   void update(double dt) {
     super.update(dt);
+
+    if (playerReference == null) {
+      findPlayerReference();
+      return;
+    }
+
     if (usingKeyboard) {
-      if (keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-        player.moveLeft();
-      } else if (keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-        player.moveRight();
-      } else {
-        player.stopMoving();
-      }
+      handleKeyboardMovement();
+    } else if (joystick.direction != JoystickDirection.idle) {
+      handleJoystickMovement();
+    } else {
+      playerReference!.stopMoving();
     }
   }
 
-  @override
-  KeyEventResult onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    if (event is KeyDownEvent) {
-      keyboardKeysPressed.add(event.logicalKey);
-      usingKeyboard = true;
-    } else if (event is KeyUpEvent) {
-      keyboardKeysPressed.remove(event.logicalKey);
+  void handleKeyboardMovement() {
+    final isLeftKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed =
+        keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
+            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
+
+    if (isLeftKeyPressed && isRightKeyPressed) {
+      playerReference!.stopMoving();
+    } else if (isLeftKeyPressed) {
+      playerReference!.moveLeft();
+    } else if (isRightKeyPressed) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
       usingKeyboard = false;
     }
+  }
 
-    return KeyEventResult.handled;
+  void handleJoystickMovement() {
+    final delta = joystick.delta;
+    if (delta.x < -0.2) {
+      playerReference!.moveLeft();
+    } else if (delta.x > 0.2) {
+      playerReference!.moveRight();
+    } else {
+      playerReference!.stopMoving();
+    }
+  }
+
+  void findPlayerReference() {
+    for (final component in activeLevel.children) {
+      if (component is Character) {
+        playerReference = component;
+        break;
+      }
+    }
   }
 }

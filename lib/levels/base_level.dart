@@ -12,6 +12,7 @@ class Level extends World with HasCollisionDetection {
   final String character;
 
   Level({required this.activeLevel, required this.character});
+  String get levelName => activeLevel;
 
   Future<void> get ready => _completer.future;
 
