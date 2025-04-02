@@ -38,7 +38,7 @@ class PlatFormerGameDev extends FlameGame
   int currentLevel = 1;
   int score = 0;
   int coins = 0;
-  int gold = 0;
+  int coconut = 0;
   int lives = 3;
   int selectedSaveSlot = 1;
 
@@ -79,8 +79,9 @@ class PlatFormerGameDev extends FlameGame
         level: currentLevel,
         score: score,
         coins: coins,
-        gold: gold,
+        coconut: coconut,
         lives: lives,
+        character: character,
         saveManager: saveManager,
       );
     });
@@ -114,7 +115,7 @@ class PlatFormerGameDev extends FlameGame
       level: currentLevel,
       score: score,
       coins: coins,
-      gold: gold,
+      coconut: coconut,
       lives: lives,
       character: character,
       timestamp: DateTime.now(),

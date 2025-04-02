@@ -2,7 +2,7 @@ class GameState {
   int level;
   int score;
   int coins;
-  int gold;
+  int coconut;
   int lives;
   String? character;
   DateTime? timestamp;
@@ -12,7 +12,7 @@ class GameState {
     required this.level,
     required this.score,
     required this.coins,
-    required this.gold,
+    required this.coconut,
     required this.lives,
     this.character,
     this.timestamp,
@@ -23,7 +23,7 @@ class GameState {
       'level': level,
       'score': score,
       'coins': coins,
-      'gold': gold,
+      'coconut': coconut,
       'lives': lives,
       'character': character,
       'timestamp': timestamp?.toIso8601String(),
@@ -35,7 +35,7 @@ class GameState {
       level: json['level'],
       score: json['score'],
       coins: json['coins'],
-      gold: json['gold'],
+      coconut: json['coconut'],
       lives: json['lives'],
       character: json['character'],
       timestamp: json['timestamp'] != null
