@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
-import 'package:mobile_app_roject/services/save_manager.dart';  // Import SaveManager
-import 'package:mobile_app_roject/models/game_state.dart';  // Import GameState model
+import 'package:mobile_app_roject/services/save_manager.dart';
+import 'package:mobile_app_roject/models/game_state.dart';
 
 class PauseOverlay extends StatefulWidget {
   final VoidCallback onResume;
@@ -13,8 +13,9 @@ class PauseOverlay extends StatefulWidget {
   final int coins;
   final int gold;
   final int lives;
+  final SaveManager saveManager; // Pass SaveManager instance
 
-  const PauseOverlay({
+  PauseOverlay({
     super.key,
     required this.onResume,
     required this.onRestart,
@@ -24,6 +25,7 @@ class PauseOverlay extends StatefulWidget {
     required this.coins,
     required this.gold,
     required this.lives,
+    required this.saveManager, // Required SaveManager
   });
 
   @override
@@ -36,13 +38,16 @@ class _PauseOverlayState extends State<PauseOverlay> {
   bool _isHoveringSettings = false;
   bool _isHoveringHome = false;
   bool _isHoveringSave = false;
-  int selectedSlot = 1; // To track the selected save slot
+  
+  late int _selectedSlot; // Change selectedSlot to state variable
 
-  final SaveManager _saveManager = SaveManager(); // Instance of SaveManager
+  @override
+  void initState() {
+    super.initState();
+    _selectedSlot = 1; // Default slot
+  }
 
-  // Save the game to Firestore
   void _saveGame() async {
-    // Create a GameState object with actual game data
     GameState gameState = GameState(
       level: widget.level,
       score: widget.score,
@@ -51,27 +56,11 @@ class _PauseOverlayState extends State<PauseOverlay> {
       lives: widget.lives,
     );
 
-    // Save game data to the selected slot
-    await _saveManager.saveGame(selectedSlot, gameState);
+    await widget.saveManager.saveGame(_selectedSlot, gameState);
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Game saved in Slot $selectedSlot')),
+      SnackBar(content: Text('Game saved in Slot $_selectedSlot')),
     );
-  }
-
-  // Load the game from a specific slot (optional for future use)
-  void _loadGame() async {
-    GameState? loadedGame = await _saveManager.loadGame(selectedSlot);
-    if (loadedGame != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Loaded Slot $selectedSlot')),
-      );
-      // You can also update the game state here based on the loaded data
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No save data in Slot $selectedSlot')),
-      );
-    }
   }
 
   @override
@@ -87,163 +76,71 @@ class _PauseOverlayState extends State<PauseOverlay> {
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.7),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.white,
-              width: 2,
-            ),
+            border: Border.all(color: Colors.white, width: 2),
           ),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'PAUSED',
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: 'PixelFont',
-                    letterSpacing: 4,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'PAUSED',
+                style: TextStyle(
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontFamily: 'PixelFont',
+                  letterSpacing: 4,
+                ),
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildPauseButton(Icons.play_arrow, 'Continue', Colors.green, widget.onResume),
+                  _buildPauseButton(Icons.refresh, 'Restart', Colors.orange, widget.onRestart),
+                  _buildPauseButton(Icons.save, 'Save', Colors.purple, _saveGame),
+                  _buildPauseButton(
+                    Icons.settings,
+                    'Settings',
+                    Colors.blue,
+                    () => showDialog(context: context, builder: (_) => const SettingsOverlay()),
                   ),
-                ),
-                const SizedBox(height: 40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildPauseButton(
-                      Icons.play_arrow,
-                      'Continue',
-                      _isHoveringResume,
-                      Colors.green,
-                      widget.onResume,
-                      onHover: (hovering) {
-                        setState(() => _isHoveringResume = hovering);
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    _buildPauseButton(
-                      Icons.refresh,
-                      'Restart',
-                      _isHoveringRestart,
-                      Colors.orange,
-                      widget.onRestart,
-                      onHover: (hovering) {
-                        setState(() => _isHoveringRestart = hovering);
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    _buildPauseButton(
-                      Icons.save,
-                      'Save',
-                      _isHoveringSave,
-                      Colors.purple,
-                      _saveGame, // Save game action
-                      onHover: (hovering) {
-                        setState(() => _isHoveringSave = hovering);
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    _buildPauseButton(
-                      Icons.settings,
-                      'Settings',
-                      _isHoveringSettings,
-                      Colors.blue,
-                      () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => const SettingsOverlay(),
-                        );
-                      },
-                      onHover: (hovering) {
-                        setState(() => _isHoveringSettings = hovering);
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    _buildPauseButton(
-                      Icons.home,
-                      'Home',
-                      _isHoveringHome,
-                      Colors.red,
-                      () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PlatformerMainMenu(),
-                          ),
-                        );
-                      },
-                      onHover: (hovering) {
-                        setState(() => _isHoveringHome = hovering);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                // Save Slot Selection Buttons
-                Text('Select Save Slot:', style: TextStyle(color: Colors.white, fontSize: 18)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(3, (index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            selectedSlot = index + 1;
-                          });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: selectedSlot == index + 1 ? Colors.green : Colors.grey,
-                        ),
-                        child: Text('Slot ${index + 1}'),
-                      ),
-                    );
+                  _buildPauseButton(Icons.home, 'Home', Colors.red, () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const PlatformerMainMenu()));
                   }),
-                ),
-              ],
-            ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text('Select Save Slot:', style: TextStyle(color: Colors.white, fontSize: 18)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(3, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() => _selectedSlot = index + 1);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: _selectedSlot == index + 1 ? Colors.green : Colors.grey,
+                      ),
+                      child: Text('Slot ${index + 1}'),
+                    ),
+                  );
+                }),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildPauseButton(
-    IconData icon,
-    String label,
-    bool isHovering,
-    Color color,
-    VoidCallback onPressed, {
-    required Function(bool) onHover,
-  }) {
-    return MouseRegion(
-      onEnter: (_) => onHover(true),
-      onExit: (_) => onHover(false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()..scale(isHovering ? 1.1 : 1.0),
-        child: Column(
-          children: [
-            IconButton(
-              iconSize: 50,
-              icon: Icon(
-                icon,
-                color: color,
-              ),
-              onPressed: onPressed,
-            ),
-            Text(
-              label,
-              style: TextStyle(
-                color: color,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
+  Widget _buildPauseButton(IconData icon, String label, Color color, VoidCallback onPressed) {
+    return Column(
+      children: [
+        IconButton(iconSize: 50, icon: Icon(icon, color: color), onPressed: onPressed),
+        Text(label, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.bold)),
+      ],
     );
   }
 }

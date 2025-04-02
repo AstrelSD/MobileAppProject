@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
+import 'package:flame/components.dart';
 
 class GameHud extends PositionComponent {
   int health = 3;
