@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flame/components.dart';
-import 'package:flame/events.dart';
 import 'package:flame/collisions.dart';
+import 'package:flame_tiled/flame_tiled.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 
@@ -10,46 +11,43 @@ enum CharacterState { idle, running, jump }
 enum CharacterDirection { left, right, none }
 
 class Character extends SpriteAnimationGroupComponent<CharacterState>
-    with HasGameRef<PlatFormerGameDev>, CollisionCallbacks {
+    with HasGameRef<PlatFormerGameDev>, CollisionCallbacks, KeyboardHandler {
   final String character;
-  final double _speed = 200;
-  final double _jumpForce = -500;
-  final double _gravity = 800;
-
-  Vector2 velocity = Vector2.zero();
-  bool isOnGround = false;
-  bool isFacingRight = true;
-  CharacterDirection direction = CharacterDirection.none;
-  bool isMoving = false;
-
-  Character({required Vector2 position, required this.character})
-      : super(position: position, size: Vector2.all(32));
-
+  final double speed = 200;
+  final double jumpForce = -400;
+  final double gravity = 800;
   final double stepTime = 0.05;
+
+  CharacterDirection characterDirection = CharacterDirection.none;
+  Vector2 velocity = Vector2.zero();
+  bool isFacingRight = true;
+  bool isJumping = false;
+  bool isOnGround = false;
+
   late final SpriteAnimation idleAnimation;
   late final SpriteAnimation runningAnimation;
   late final SpriteAnimation jumpAnimation;
+
+  Character({required Vector2 position, required this.character})
+      : super(position: position, size: Vector2.all(32));
 
   @override
   FutureOr<void> onLoad() async {
     add(RectangleHitbox(
       size: Vector2(28, 30),
       position: Vector2(2, 2),
-      isSolid: true,
     ));
 
-    await _loadCharacterAnimations();
-
+    loadCharacterAnimations();
+    print('$character');
     current = CharacterState.idle;
-    isOnGround = false;
-
     return super.onLoad();
   }
 
-  Future<void> _loadCharacterAnimations() async {
-    idleAnimation = await _loadAsepriteAnimation('Idle', 11);
-    runningAnimation = await _loadAsepriteAnimation('Run', 12);
-    jumpAnimation = await _loadAsepriteAnimation('Jump', 1);
+  void loadCharacterAnimations() {
+    idleAnimation = _loadAsepriteAnimation('Idle', 1);
+    runningAnimation = _loadAsepriteAnimation('Walk', 1);
+    jumpAnimation = _loadAsepriteAnimation('Jump', 1);
 
     animations = {
       CharacterState.idle: idleAnimation,
@@ -58,10 +56,9 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
     };
   }
 
-  Future<SpriteAnimation> _loadAsepriteAnimation(
-      String state, int amount) async {
+  SpriteAnimation _loadAsepriteAnimation(String state, int amount) {
     return SpriteAnimation.fromFrameData(
-      await game.images.load('Main Characters/$character/$state (32x32).png'),
+      game.images.fromCache('Main Characters/$character/$state.png'),
       SpriteAnimationData.sequenced(
         amount: amount,
         stepTime: stepTime,
@@ -71,8 +68,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   }
 
   void moveLeft() {
-    direction = CharacterDirection.left;
-    isMoving = true;
+    characterDirection = CharacterDirection.left;
     if (isFacingRight) {
       flipHorizontallyAroundCenter();
       isFacingRight = false;
@@ -80,8 +76,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   }
 
   void moveRight() {
-    direction = CharacterDirection.right;
-    isMoving = true;
+    characterDirection = CharacterDirection.right;
     if (!isFacingRight) {
       flipHorizontallyAroundCenter();
       isFacingRight = true;
@@ -89,66 +84,106 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   }
 
   void stopMoving() {
-    direction = CharacterDirection.none;
-    isMoving = false;
+    characterDirection = CharacterDirection.none;
     velocity.x = 0;
   }
 
   void jump() {
-    if (isOnGround) {
-      velocity.y = _jumpForce;
+    if (isOnGround && !isJumping) {
+      velocity.y = jumpForce;
       isOnGround = false;
+      isJumping = true;
       current = CharacterState.jump;
     }
   }
 
   @override
   void update(double dt) {
-    _updateMovement(dt);
-    _checkGameOver();
+    _updateCharacterMovement(dt);
+    _updateJump(dt);
+    checkGameOver();
+    checkLevelComplete();
     super.update(dt);
   }
 
-  void _checkGameOver() {
+  void checkGameOver() {
     if (position.y > gameRef.size.y + 100) {
       gameRef.overlays.add('GameOver');
     }
   }
 
-  void _updateMovement(double dt) {
+  void checkLevelComplete() {
+    final endObjects = gameRef.activeLevel.level.tileMap
+        .getLayer<ObjectGroup>('object1')
+        ?.objects
+        .where((obj) => obj.class_ == 'END');
+
+    if (endObjects != null && endObjects.isNotEmpty) {
+      final end = endObjects.first;
+      final endRect = Rect.fromLTWH(
+        end.x,
+        end.y,
+        end.width,
+        end.height,
+      );
+
+      final playerRect = Rect.fromLTWH(
+        position.x,
+        position.y,
+        size.x,
+        size.y,
+      );
+
+      if (playerRect.overlaps(endRect)) {
+        gameRef.overlays.add('LevelComplete');
+      }
+    }
+  }
+
+  void _updateCharacterMovement(double dt) {
+    double dirX = 0.0;
+    switch (characterDirection) {
+      case CharacterDirection.left:
+        dirX -= speed;
+        if (!isJumping) current = CharacterState.running;
+        break;
+      case CharacterDirection.right:
+        dirX += speed;
+        if (!isJumping) current = CharacterState.running;
+        break;
+      case CharacterDirection.none:
+        if (!isJumping) current = CharacterState.idle;
+        dirX = 0;
+        break;
+    }
+    velocity.x = dirX;
+    position.x += velocity.x * dt;
+  }
+
+  void _updateJump(double dt) {
     if (!isOnGround) {
-      velocity.y += _gravity * dt;
+      velocity.y += gravity * dt;
+      position.y += velocity.y * dt;
+      current = CharacterState.jump;
     } else {
       velocity.y = 0;
+      isJumping = false;
     }
-
-    if (isMoving) {
-      switch (direction) {
-        case CharacterDirection.left:
-          velocity.x = -_speed;
-          if (isOnGround) current = CharacterState.running;
-          break;
-        case CharacterDirection.right:
-          velocity.x = _speed;
-          if (isOnGround) current = CharacterState.running;
-          break;
-        case CharacterDirection.none:
-          velocity.x = 0;
-          if (isOnGround) current = CharacterState.idle;
-          break;
-      }
-    } else {
-      velocity.x = 0;
-      if (isOnGround) current = CharacterState.idle;
-    }
-
-    position += velocity * dt;
   }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Ground) {
-      _handleGroundCollision(intersectionPoints, other);
+      if (intersectionPoints.length == 2) {
+        final mid = (intersectionPoints.elementAt(0) +
+                intersectionPoints.elementAt(1)) /
+            2;
+        if (position.y < mid.y) {
+          isOnGround = true;
+          position.y = other.position.y - size.y;
+          velocity.y = 0;
+        }
+      }
     }
     super.onCollision(intersectionPoints, other);
   }
@@ -157,38 +192,8 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   void onCollisionEnd(PositionComponent other) {
     if (other is Ground) {
       isOnGround = false;
-      if (current != CharacterState.jump) {
-        current = CharacterState.jump;
-      }
     }
     super.onCollisionEnd(other);
   }
-
-  void _handleGroundCollision(Set<Vector2> intersectionPoints, Ground ground) {
-    final min = intersectionPoints.reduce(
-        (a, b) => Vector2(a.x < b.x ? a.x : b.x, a.y < b.y ? a.y : b.y));
-    final max = intersectionPoints.reduce(
-        (a, b) => Vector2(a.x > b.x ? a.x : b.x, a.y > b.y ? a.y : b.y));
-
-    final collisionNormal =
-        (absoluteCenter - (min + (max - min) / 2)).normalized();
-
-    if (collisionNormal.y < -0.5) {
-      position.y = ground.position.y - size.y;
-      velocity.y = 0;
-      isOnGround = true;
-      if (!isMoving) {
-        current = CharacterState.idle;
-      }
-    } else if (collisionNormal.y > 0.5) {
-      position.y = ground.position.y + ground.size.y;
-      velocity.y = 0;
-    } else if (collisionNormal.x < -0.5) {
-      position.x = ground.position.x + ground.size.x;
-      velocity.x = 0;
-    } else if (collisionNormal.x > 0.5) {
-      position.x = ground.position.x - size.x;
-      velocity.x = 0;
-    }
-  }
 }
+
