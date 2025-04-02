@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/screens/login_screen.dart';
 
 class SettingsOverlay extends StatefulWidget {
   const SettingsOverlay ({super.key});
@@ -121,6 +122,16 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                     onPressed: () => print('Help pressed'),
                   )
               ),
+              _settingsRow(
+                  icon: Icons.help_outline,
+                  label: 'Log out',
+                  content: IconButton(
+                    icon: Icon(Icons.logout,
+                        color: Colors.red[400],
+                        size: 30),
+                    onPressed: _confirmLogout,
+                  )
+              ),
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -168,5 +179,30 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
         ],
       ),
     );
+  }
+ void _confirmLogout() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Log Out"),
+          content: const Text("Are you sure you want to log out?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: _logout,
+              child: const Text("Log Out", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _logout() {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }
