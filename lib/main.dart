@@ -5,6 +5,8 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mobile_app_roject/screens/platformer_splash.dart';
 import 'package:mobile_app_roject/screens/login_screen.dart';
+import 'package:mobile_app_roject/screens/sign_in_page.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +41,25 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+// 🔹 Auth Wrapper: Checks user authentication state
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator()); // Loading state
+        } else if (snapshot.hasData) {
+          return const PlatformerSplash(); // User is signed in, go to game
+        } else {
+          return SignInPage(); // User is NOT signed in, go to sign-in
+        }
+      },
     );
   }
 }

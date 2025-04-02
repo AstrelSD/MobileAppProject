@@ -8,7 +8,7 @@ class MenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250,
+      width: 250, // Fixed width to prevent resizing
       height: 50,
       child: ElevatedButton(
         onPressed: onPressed,
@@ -26,7 +26,7 @@ class MenuButton extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
             letterSpacing: 2,
             fontFamily: 'PixelFont',
@@ -38,6 +38,9 @@ class MenuButton extends StatelessWidget {
               ),
             ],
           ),
+          maxLines: 1, // Prevent the text from wrapping
+          overflow: TextOverflow.ellipsis, // Show ellipsis if text overflows
+          textAlign: TextAlign.center, // Center the text horizontally
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:mobile_app_roject/levels/base_level.dart';
 
 class Level1 extends Level {
-  Level1({required super.character}) : super(activeLevel: "level1.tmx");
+  Level1({required super.character}) : super(activeLevel: "level3.tmx");
 
   @override
   Future<void> onLoad() async {
@@ -12,6 +12,5 @@ class Level1 extends Level {
 
   @override
   void loadLevelMechanics() {
-    print('Level3-specific mechanics added');
   }
 }

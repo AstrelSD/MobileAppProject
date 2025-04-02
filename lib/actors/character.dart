@@ -46,7 +46,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
 
   void loadCharacterAnimations() {
     idleAnimation = _loadAsepriteAnimation('Idle', 1);
-    runningAnimation = _loadAsepriteAnimation('Walk', 1);
+    runningAnimation = _loadAsepriteAnimation('Idle', 1);
     jumpAnimation = _loadAsepriteAnimation('Jump', 1);
 
     animations = {

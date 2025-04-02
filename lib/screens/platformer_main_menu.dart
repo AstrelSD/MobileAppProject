@@ -5,6 +5,12 @@ import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 import 'package:mobile_app_roject/screens/load_game_menu.dart';
 
 class PlatformerMainMenu extends StatelessWidget {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mobile_app_roject/screens/game_screen.dart';
+import 'package:mobile_app_roject/screens/sign_in_page.dart';
+
+class PlatformerMainMenu extends StatefulWidget {
   const PlatformerMainMenu({super.key});
 
   Widget buildMenuButton(String text, VoidCallback onPressed) {
@@ -45,6 +51,54 @@ class PlatformerMainMenu extends StatelessWidget {
   }
 
   @override
+  _PlatformerMainMenuState createState() => _PlatformerMainMenuState();
+}
+
+class _PlatformerMainMenuState extends State<PlatformerMainMenu> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? user;
+  String? lastLevel; // Stores the last played level
+  bool isLoading = true; // Shows loading indicator
+
+  @override
+  void initState() {
+    super.initState();
+    _checkUserStatus();
+  }
+
+  // Check if user is signed in and get progress
+  Future<void> _checkUserStatus() async {
+    user = _auth.currentUser;
+
+    if (user != null) {
+      // Fetch last level from Firestore
+      DocumentSnapshot progressSnapshot =
+          await _firestore.collection('progress').doc(user!.uid).get();
+
+      if (progressSnapshot.exists) {
+        setState(() {
+          lastLevel = progressSnapshot.get('lastLevel') ?? 'level_1';
+        });
+      }
+    }
+
+    setState(() {
+      isLoading = false; // Hide loading spinner
+    });
+  }
+
+  // Sign out function
+  Future<void> _signOut() async {
+    await _auth.signOut();
+    setState(() {
+      user = null; // Reset user state
+    });
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SignInPage()));
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
@@ -58,25 +112,84 @@ class PlatformerMainMenu extends StatelessWidget {
             color: Colors.black.withAlpha(50),
           ),
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 40),
-                Text(
-                  'Srilankan Diaries',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 37, 68, 4),
-                    fontFamily: 'PixelFont',
-                    shadows: [
-                      Shadow(
-                        blurRadius: 5,
-                        color: const Color.fromARGB(255, 222, 255, 178),
-                        offset: Offset(4, 4),
+            child: isLoading
+                ? CircularProgressIndicator() // Show loading while fetching data
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 40),
+                      Text(
+                        'Srilankan Diaries',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
+                          color: const Color.fromARGB(255, 37, 68, 4),
+                          fontFamily: 'PixelFont',
+                          shadows: [
+                            Shadow(
+                              blurRadius: 5,
+                              color: const Color.fromARGB(255, 222, 255, 178),
+                              offset: Offset(4, 4),
+                            ),
+                          ],
+                        ),
                       ),
+                      SizedBox(height: 30),
+
+                      // Show "Continue" if user is signed in, otherwise "Sign In"
+                      buildMenuButton(user != null ? 'Continue' : 'Sign In', () {
+                        if (user != null && lastLevel != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  GameScreen(initialLevel: lastLevel!),
+                            ),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignInPage()),
+                          );
+                        }
+                      }),
+
+                      SizedBox(height: 15),
+
+                      // "New Game" starts from level_1
+                      buildMenuButton('New Game', () {
+                        if (user != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      GameScreen(initialLevel: 'level_1')));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SignInPage()));
+                        }
+                      }),
+
+                      SizedBox(height: 15),
+                      buildMenuButton('Settings', () {
+                        // Navigate to the settings screen
+                      }),
+
+                      SizedBox(height: 15),
+                      buildMenuButton('Exit', () {
+                        // Exit the app
+                      }),
+
+                      // Show "Sign Out" only if user is logged in
+                      if (user != null) ...[
+                        SizedBox(height: 15),
+                        buildMenuButton('Sign Out', _signOut),
+                      ]
                     ],
                   ),
                 ),
