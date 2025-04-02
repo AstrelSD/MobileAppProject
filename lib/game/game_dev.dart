@@ -56,7 +56,7 @@ class PlatFormerGameDev extends FlameGame
 
     debugMode = true;
     hud = GameHud();
-    add(hud);  // <-- Add the HUD to the game component tree
+    add(hud); // <-- Add the HUD to the game component tree
 
     addJoystick();
     addJumpButton();
@@ -66,10 +66,9 @@ class PlatFormerGameDev extends FlameGame
   Future<void> loadGame(Level level) async {
     cam = CameraComponent.withFixedResolution(
       world: level,
-      width: 640,
-      height: 360,
-    );
-    cam.viewfinder.anchor = Anchor.center;
+      width: canvasSize.x,
+      height: canvasSize.y,
+    )..viewfinder.anchor = Anchor.topLeft;
     addAll([cam, level]);
 
     await level.ready;
@@ -223,4 +222,3 @@ class PlatFormerGameDev extends FlameGame
     super.onTapCancel(event);
   }
 }
-
