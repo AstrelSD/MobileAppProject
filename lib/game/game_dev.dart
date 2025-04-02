@@ -221,3 +221,4 @@ class PlatFormerGameDev extends FlameGame
     super.onTapCancel(event);
   }
 }
+

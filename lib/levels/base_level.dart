@@ -70,3 +70,4 @@ class Ground extends PositionComponent with CollisionCallbacks {
     ));
   }
 }
+
