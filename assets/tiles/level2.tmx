@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="269">
- <tileset firstgid="1" source="Tiles - Beach.tsx"/>
+ <tileset firstgid="1" source="Tiles_Beach.tsx"/>
  <imagelayer id="22" name="Image Layer 1" repeatx="1">
   <image source="assets/images/Sea2.png" width="1496" height="317"/>
  </imagelayer>
