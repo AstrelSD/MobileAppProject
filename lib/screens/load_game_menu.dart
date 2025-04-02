@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/widgets/menu_button.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 import 'package:mobile_app_roject/services/save_manager.dart';
+import 'package:mobile_app_roject/screens/game_screen.dart';
 
 class LoadGameMenu extends StatefulWidget {
   const LoadGameMenu({super.key});
@@ -37,18 +38,30 @@ class _LoadGameMenuState extends State<LoadGameMenu> {
   }
 
   void _loadGame(int slot) async {
-    try {
-      GameState? gameState = await _saveManager.loadGame(slot);
-      if (gameState != null) {
-        print('Loaded Game from Slot $slot');
-        // TODO: Navigate to the game screen with gameState
-      } else {
-        print('No game data found in Slot $slot');
-      }
-    } catch (e) {
-      print('Error loading game: $e');
+  try {
+    GameState? gameState = await _saveManager.loadGame(slot);
+    if (gameState != null) {
+      print('Loaded Game from Slot $slot');
+      
+      // Navigate to the GameScreen with the saved level and character
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => GameScreen(
+            initialLevel: 'level_${gameState.level}',  // Convert level to string format
+            character: gameState.character, // Pass the saved character
+            loadedState: gameState, // Pass the loaded game state
+          ),
+        ),
+      );
+    } else {
+      print('No game data found in Slot $slot');
     }
+  } catch (e) {
+    print('Error loading game: $e');
   }
+}
+
 
   Widget _buildSaveSlotButton(int slot) {
     bool isSlotUsed = usedSlots.contains(slot);
