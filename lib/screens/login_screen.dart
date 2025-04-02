@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void _signIn() async {
     User? user = await _authService.signIn(_emailController.text, _passwordController.text);
     if (user != null) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/splash'); 
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Login failed')),
@@ -35,30 +35,130 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    resizeToAvoidBottomInset: true,
+    body: OrientationBuilder(
+      builder: (context, orientation) {
+        // Get the screen size and keyboard height using MediaQuery
+        double screenHeight = MediaQuery.of(context).size.height;
+        double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+        return SingleChildScrollView( // Wrap content in SingleChildScrollView
+          child: Container(
+            height: screenHeight - keyboardHeight, // Adjust the container height
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xFF64B5F6), Color(0xFF1976D2)], // Blue Gradient
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Left Side: A Welcome Message
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.lock_outline, size: 100, color: Colors.white),
+                          const SizedBox(height: 20),
+                          Text(
+                            "Welcome Back!",
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Sign in to continue",
+                            style: TextStyle(fontSize: 18, color: Colors.white70),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(width: 40),
+
+                    // Right Side: Login Form
+                    Expanded(
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 10,
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _buildTextField(_emailController, "Email", Icons.email),
+                              const SizedBox(height: 12),
+                              _buildTextField(_passwordController, "Password", Icons.lock, obscureText: true),
+                              const SizedBox(height: 20),
+                              _buildButton("Login", _signIn, Colors.blueAccent),
+                              const SizedBox(height: 10),
+                              _buildButton("Sign Up", _signUp, Colors.green),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: _signIn, child: Text('Login')),
-            ElevatedButton(onPressed: _signUp, child: Text('Sign Up')),
-          ],
+          ),
+        );
+      },
+    ),
+  );
+}
+
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hint, IconData icon, {bool obscureText = false}) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        hintText: hint,
+        filled: true,
+        fillColor: Colors.blue[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide.none,
         ),
       ),
     );
   }
-}
+
+  Widget _buildButton(String text, VoidCallback onPressed, Color color) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
+    );
+  }

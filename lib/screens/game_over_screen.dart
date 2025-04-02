@@ -156,7 +156,7 @@ class _GameOverScreenState extends State<GameOverScreen>
                       fontFamily: 'PixelFont',
                     ),
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 30),
                   _buildAnimatedButton(
                     'Restart',
                     _isHoveringRestart,
