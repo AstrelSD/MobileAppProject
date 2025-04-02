@@ -14,7 +14,6 @@ import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
 import 'package:mobile_app_roject/screens/level_complete_screen.dart';
 import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
-import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/services/save_manager.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 
@@ -89,8 +88,7 @@ class PlatFormerGameDev extends FlameGame
     overlays.clear();
 
     hud = GameHud();
-    add(hud);  // <-- Add the HUD to the game component tree
-    // Clear existing components
+    add(hud);  
     if (cam != null) {
       cam!.removeFromParent();
     }
@@ -101,17 +99,14 @@ class PlatFormerGameDev extends FlameGame
       activeLevel.removeFromParent();
     }
 
-    // Create new instances
     activeLevel = level;
     player = Character(character: character, position: Vector2(100, 200));
     playerReference = player;
 
-    // Initialize camera
     cam = CameraComponent.withFixedResolution(width: 800, height: 600)
       ..viewfinder.anchor = Anchor.topLeft
       ..follow(player);
 
-    // Add components in correct order
     world.add(activeLevel);
     world.add(player);
     add(cam!);

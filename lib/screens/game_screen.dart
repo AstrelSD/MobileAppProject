@@ -3,7 +3,6 @@ import 'package:flame/game.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
-import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 
 
@@ -30,16 +29,14 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-    // Initialize the game instance based on saved state or default level
     game = PlatFormerGameDev(
       initialLevel: widget.loadedState?.level != null
-          ? 'level_${widget.loadedState!.level}' // Convert level to string format
-          : widget.initialLevel, // Default if no saved state
+          ? 'level_${widget.loadedState!.level}' 
+          : widget.initialLevel, 
       character: widget.character,
     );
 
     if (widget.loadedState != null) {
-      // Apply saved progress to the game
       game.loadSavedProgress(widget.loadedState!);
     }
   }
@@ -86,24 +83,23 @@ class _GameScreenState extends State<GameScreen> {
     builder: (context) => PauseOverlay(
       onResume: () => game.resumeEngine(),
       onRestart: () {
-        game.resetGame(); // Ensure this function resets the game correctly
+        game.resetGame(); 
       },
       onSave: () async {
-        await game.saveGame(); // Call the correct save function
+        await game.saveGame(); 
       },
-      level: game.currentLevel,  // Fetch level from game instance
-      score: game.score,         // Fetch score from game instance
-      coins: game.coins,         // Fetch coins from game instance
-      coconut: game.coconut,           // Fetch gold from game instance
+      level: game.currentLevel, 
+      score: game.score,         
+      coins: game.coins,         
+      coconut: game.coconut,        
       lives: game.lives, 
-      character: widget.character,// Pass the selected save slot
-      saveManager: game.saveManager, // Pass SaveManager instance from game
+      character: widget.character,
+      saveManager: game.saveManager, 
     ),
-    barrierColor: Colors.black.withOpacity(0.5),
-  ).then((_) => game.resumeEngine());
-},
-
-            ),
+        barrierColor: Colors.black.withOpacity(0.5),
+      ).then((_) => game.resumeEngine());
+      },
+      ),
           ),
         ],
       ),

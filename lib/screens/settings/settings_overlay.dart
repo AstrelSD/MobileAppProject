@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SettingsOverlay extends StatefulWidget {
   const SettingsOverlay ({super.key});
@@ -111,7 +112,6 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                     activeColor: Colors.green[400],
                   )
               ),
-              //Help
               _settingsRow(
                   icon: Icons.help_outline,
                   label: 'Help',
@@ -202,7 +202,9 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
     );
   }
 
-  void _logout() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-  }
+void _logout() async {
+  await FirebaseAuth.instance.signOut(); 
+  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+}
+
 }

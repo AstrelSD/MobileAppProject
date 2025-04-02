@@ -6,7 +6,6 @@ class SaveManager {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Save game progress to a specific slot
 Future<void> saveGame(int slot, GameState gameState) async {
   String? userId = _auth.currentUser?.uid;
   if (userId == null) return;
@@ -16,12 +15,11 @@ Future<void> saveGame(int slot, GameState gameState) async {
       .doc(userId)
       .collection('saveSlots')
       .doc('slot_$slot')
-      .set(gameState.toJson()); // Save the GameState as JSON
+      .set(gameState.toJson()); 
 
   print('Game saved in Slot $slot');
 }
 
-// Load game progress from a specific slot
 Future<GameState?> loadGame(int slot) async {
   String? userId = _auth.currentUser?.uid;
   if (userId == null) return null;
@@ -34,14 +32,13 @@ Future<GameState?> loadGame(int slot) async {
       .get();
 
   if (snapshot.exists) {
-    return GameState.fromJson(snapshot.data() as Map<String, dynamic>); // Load the GameState from JSON
+    return GameState.fromJson(snapshot.data() as Map<String, dynamic>); 
   } else {
     print('No save data found in Slot $slot');
     return null;
   }
 }
 
-// Check which save slots are used
 Future<List<int>> getUsedSlots() async {
   String? userId = _auth.currentUser?.uid;
   if (userId == null) return [];

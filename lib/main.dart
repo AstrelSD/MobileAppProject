@@ -49,9 +49,9 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
-          return PlatformerSplash(); // If logged in, go to splash/game screen
+          return PlatformerSplash();
         } else {
-          return LoginScreen(); // Otherwise, go to login
+          return LoginScreen();
         }
       },
     );

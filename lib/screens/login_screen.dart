@@ -41,16 +41,15 @@ Widget build(BuildContext context) {
     resizeToAvoidBottomInset: true,
     body: OrientationBuilder(
       builder: (context, orientation) {
-        // Get the screen size and keyboard height using MediaQuery
         double screenHeight = MediaQuery.of(context).size.height;
         double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-        return SingleChildScrollView( // Wrap content in SingleChildScrollView
+        return SingleChildScrollView( 
           child: Container(
-            height: screenHeight - keyboardHeight, // Adjust the container height
+            height: screenHeight - keyboardHeight,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
-                colors: [Color(0xFF64B5F6), Color(0xFF1976D2)], // Blue Gradient
+                colors: [Color(0xFF64B5F6), Color(0xFF1976D2)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -61,7 +60,6 @@ Widget build(BuildContext context) {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Left Side: A Welcome Message
                     Expanded(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -88,7 +86,6 @@ Widget build(BuildContext context) {
 
                     const SizedBox(width: 40),
 
-                    // Right Side: Login Form
                     Expanded(
                       child: Card(
                         shape: RoundedRectangleBorder(

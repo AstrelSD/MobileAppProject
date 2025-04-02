@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:flame/components.dart';
 
 class GameHud extends PositionComponent {
   int health = 3;
   int score = 0;
   double timeElapsed = 0.0;
-  double scoreTimer = 0.0; // Accumulator for score update
+  double scoreTimer = 0.0; 
 
   late final TextComponent healthText;
   late final TextComponent scoreText;

@@ -14,7 +14,7 @@ class PauseOverlay extends StatefulWidget {
   final int coconut;
   final int lives;
   final String character;
-  final SaveManager saveManager; // Pass SaveManager instance
+  final SaveManager saveManager; 
 
   PauseOverlay({
     super.key,
@@ -27,7 +27,7 @@ class PauseOverlay extends StatefulWidget {
     required this.coconut,
     required this.lives,
     required this.character, 
-    required this.saveManager, // Required SaveManager
+    required this.saveManager, 
   });
 
   @override
@@ -41,12 +41,12 @@ class _PauseOverlayState extends State<PauseOverlay> {
   bool _isHoveringHome = false;
   bool _isHoveringSave = false;
   
-  late int _selectedSlot; // Change selectedSlot to state variable
+  late int _selectedSlot; 
 
   @override
   void initState() {
     super.initState();
-    _selectedSlot = 1; // Default slot
+    _selectedSlot = 1; 
   }
 
   void _saveGame() async {

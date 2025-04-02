@@ -43,14 +43,13 @@ class _LoadGameMenuState extends State<LoadGameMenu> {
     if (gameState != null) {
       print('Loaded Game from Slot $slot');
       
-      // Navigate to the GameScreen with the saved level and character
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => GameScreen(
-            initialLevel: 'level_${gameState.level}',  // Convert level to string format
-            character: gameState.character, // Pass the saved character
-            loadedState: gameState, // Pass the loaded game state
+            initialLevel: 'level_${gameState.level}',  
+            character: gameState.character, 
+            loadedState: gameState, 
           ),
         ),
       );
