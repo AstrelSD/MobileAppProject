@@ -12,6 +12,5 @@ class Level1 extends Level {
 
   @override
   void loadLevelMechanics() {
-    print('Level3-specific mechanics added');
   }
 }

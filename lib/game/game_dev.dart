@@ -33,6 +33,7 @@ class PlatFormerGameDev extends FlameGame
   late GameHud hud;
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
+
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
@@ -54,9 +55,9 @@ class PlatFormerGameDev extends FlameGame
     activeLevel = Level1(character: character);
     await loadGame(activeLevel);
 
-    debugMode = true;
+    debugMode = false;
     hud = GameHud();
-    add(hud); // <-- Add the HUD to the game component tree
+    add(hud); // HUD added to UI layer
 
     addJoystick();
     addJumpButton();
@@ -68,13 +69,16 @@ class PlatFormerGameDev extends FlameGame
       world: level,
       width: canvasSize.x,
       height: canvasSize.y,
-    )..viewfinder.anchor = Anchor.topLeft;
+    )
+      ..viewfinder.anchor = Anchor.topLeft
+      ..viewfinder.zoom = 2.0; // Zoom in the world
+
     addAll([cam, level]);
 
     await level.ready;
     player = level.children.whereType<Character>().first;
     playerReference = player;
-    cam.follow(player);
+    cam.follow(player, horizontalOnly: true); // Follow only in X-direction
   }
 
   void resetGame() {
@@ -84,6 +88,7 @@ class PlatFormerGameDev extends FlameGame
 
   void addJoystick() {
     final knob = SpriteComponent(
+       paint: Paint()..color = Colors.white,
       sprite: Sprite(images.fromCache('HUD/Knob.png')),
     )..size = Vector2.all(64);
 
@@ -94,11 +99,10 @@ class PlatFormerGameDev extends FlameGame
     joystick = JoystickComponent(
       knob: knob,
       background: background,
-      margin: const EdgeInsets.only(left: 32, bottom: 32),
+      margin: const EdgeInsets.only(left: 32, bottom: 32), // Fixed position
     );
 
-    joystick.position = Vector2(100, size.y - 100);
-    add(joystick);
+    add(joystick..priority = 10); // Joystick stays above map
   }
 
   void addJumpButton() {
@@ -115,7 +119,8 @@ class PlatFormerGameDev extends FlameGame
         }
       },
     );
-    add(jumpButton);
+
+    add(jumpButton..priority = 10); // Ensures button is above the map
   }
 
   @override
