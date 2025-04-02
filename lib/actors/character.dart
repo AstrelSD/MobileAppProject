@@ -196,3 +196,4 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
     super.onCollisionEnd(other);
   }
 }
+

@@ -60,6 +60,8 @@ class PlatFormerGameDev extends FlameGame
     ));
 
     hud = GameHud();
+    add(hud);  // <-- Add the HUD to the game component tree
+
     addJoystick();
     addJumpButton();
 
@@ -230,3 +232,4 @@ class PlatFormerGameDev extends FlameGame
     super.onTapCancel(event);
   }
 }
+
