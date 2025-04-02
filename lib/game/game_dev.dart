@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/levels/level_1.dart';
+import 'package:mobile_app_roject/levels/level_2.dart';
 import 'package:mobile_app_roject/levels/level_3.dart';
 import 'package:mobile_app_roject/screens/game_over_screen.dart';
 import 'package:mobile_app_roject/screens/game_hud.dart';
@@ -17,12 +19,8 @@ import 'package:mobile_app_roject/services/save_manager.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 
 class PlatFormerGameDev extends FlameGame
-    with
-        HasKeyboardHandlerComponents,
-        DragCallbacks,
-        TapCallbacks,
-        HasCollisionDetection {
-  late final CameraComponent cam;
+    with HasKeyboardHandlerComponents, DragCallbacks, TapCallbacks, HasCollisionDetection {
+  CameraComponent? cam; // Changed to nullable
   late Level activeLevel;
   final String initialLevel;
   final String character;
@@ -49,7 +47,7 @@ class PlatFormerGameDev extends FlameGame
     saveManager = SaveManager();
     await images.loadAllImages();
     currentLevel = int.tryParse(initialLevel.replaceAll('level_', '')) ?? 1;
-    
+
     _initializeOverlays();
 
     activeLevel = Level3(character: character);
@@ -88,26 +86,31 @@ class PlatFormerGameDev extends FlameGame
   }
 
   Future<void> loadGame(Level level) async {
-    overlays.clear();
-
+    // Clear existing components
+    if (cam != null) {
+      cam!.removeFromParent();
+    }
     if (playerReference != null) {
       playerReference!.removeFromParent();
     }
+    if (activeLevel.isMounted) {
+      activeLevel.removeFromParent();
+    }
 
+    // Create new instances
     activeLevel = level;
-
-    player = Character(
-      character: character, 
-      position: Vector2(100, 200),
-    );
-
+    player = Character(character: character, position: Vector2(100, 200));
     playerReference = player;
 
-    cam = CameraComponent.withFixedResolution(width: 800, height: 600);
-    cam.viewfinder.anchor = Anchor.topLeft;
-    cam.follow(player);
+    // Initialize camera
+    cam = CameraComponent.withFixedResolution(width: 800, height: 600)
+      ..viewfinder.anchor = Anchor.topLeft
+      ..follow(player);
 
-    addAll([activeLevel, player, cam]);
+    // Add components in correct order
+    world.add(activeLevel);
+    world.add(player);
+    add(cam!);
   }
 
   Future<void> saveGame() async {
@@ -118,7 +121,7 @@ class PlatFormerGameDev extends FlameGame
       coconut: coconut,
       lives: lives,
       character: character,
-      timestamp: DateTime.now(),
+      timestamp: DateTime.now().toUtc(),
     );
     await saveManager.saveGame(selectedSaveSlot, gameState);
   }
@@ -137,7 +140,6 @@ class PlatFormerGameDev extends FlameGame
     overlays.remove('PauseOverlay');
     overlays.remove('GameOver');
     overlays.remove('LevelComplete');
-    removeAll([activeLevel, player]);
     loadGame(activeLevel);
   }
 
@@ -152,13 +154,36 @@ class PlatFormerGameDev extends FlameGame
   }
 
   void addJumpButton() {
-  jumpButton = ButtonComponent(
-    button: CircleComponent(radius: 30, paint: Paint()..color = Colors.green),
-    position: Vector2(size.x - 100, size.y - 100), // Position button at bottom-right
-    onPressed: () => player.jump(),
-  );
-  add(jumpButton);
-}
+    jumpButton = ButtonComponent(
+      button: CircleComponent(radius: 30, paint: Paint()..color = Colors.green),
+      position: Vector2(size.x - 100, size.y - 100),
+      onPressed: () => player.jump(),
+    );
+    add(jumpButton);
+  }
+
+  Future<void> loadSavedProgress(GameState savedState) async {
+    currentLevel = savedState.level;
+    score = savedState.score;
+    coins = savedState.coins;
+    coconut = savedState.coconut;
+    lives = savedState.lives;
+
+    await loadLevelBasedOnSavedState(savedState.level);
+  }
+
+  Future<void> loadLevelBasedOnSavedState(int level) async {
+    Level newLevel;
+    if (level == 1) {
+      newLevel = Level1(character: character);
+    } else if (level == 2) {
+      newLevel = Level2(character: character);
+    } else {
+      newLevel = Level3(character: character);
+    }
+
+    await loadGame(newLevel);
+  }
 
   @override
   void update(double dt) {

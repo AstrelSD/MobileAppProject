@@ -13,7 +13,7 @@ class PauseOverlay extends StatefulWidget {
   final int coins;
   final int coconut;
   final int lives;
-  final String character; // Default character
+  final String character;
   final SaveManager saveManager; // Pass SaveManager instance
 
   PauseOverlay({
@@ -57,6 +57,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
       coconut: widget.coconut,
       character: widget.character,
       lives: widget.lives,
+      timestamp: DateTime.now().toUtc() 
     );
 
     await widget.saveManager.saveGame(_selectedSlot, gameState);
