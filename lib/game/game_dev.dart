@@ -95,10 +95,11 @@ class PlatFormerGameDev extends FlameGame
   Future<void> loadGame(Level level) async {
     activeLevel = level;
 
+    // Dynamically set the camera resolution to match the screen size
     cam = CameraComponent.withFixedResolution(
       world: activeLevel,
-      width: 640,
-      height: 360,
+      width: size.x,  // Use the screen width
+      height: size.y, // Use the screen height
     );
     cam.viewfinder.anchor = Anchor.center;
     addAll([cam, activeLevel]);
