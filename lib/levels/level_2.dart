@@ -4,8 +4,8 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:mobile_app_roject/actors/character.dart';
 import 'dart:async'; // Add this for Completer
 
-class Level2 extends Level {
-  Level2({required super.character}) : super(activeLevel: "level2.tmx");
+class Level3 extends Level {
+  Level3({required super.character}) : super(activeLevel: "level2_map.tmx");
   final Completer<void> _completer = Completer(); 
   
 
