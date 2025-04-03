@@ -19,6 +19,8 @@ abstract class Collectible extends SpriteComponent
     add(RectangleHitbox());
   }
 
+  bool collected = false;
+
   @override
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {

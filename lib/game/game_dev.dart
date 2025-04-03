@@ -36,9 +36,10 @@ class PlatFormerGameDev extends FlameGame
   int coins = 0;
   int coconut = 0;
   int lives = 3;
-  bool playSounds = false;
+  bool playSounds = true;  // Assuming you want sounds enabled
   double soundVolume = 1.0;
   int gold = 0;
+
 
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
@@ -54,9 +55,18 @@ class PlatFormerGameDev extends FlameGame
 
   PlatFormerGameDev({required this.initialLevel, required this.character});
 
+  
+
   @override
   FutureOr<void> onLoad() async {
     await images.loadAllImages();
+    await FlameAudio.audioCache.loadAll([
+      'coinpickup.wav',
+      'coconutpickup.wav',
+      'levelcomplete.wav',
+      'jump.wav',
+      'background_music.mp3', // Make sure to load the background music
+    ]);
 
     overlays.addEntry('GameOver', (context, game) {
       return GameOverScreen(initialLevel: initialLevel, character: character);
@@ -79,6 +89,9 @@ class PlatFormerGameDev extends FlameGame
 
     activeLevel = await loadLevel(initialLevel);
     await loadGame(activeLevel);
+
+    // Play background music after loading the level
+    FlameAudio.bgm.play('background_music.mp3', volume: 0.5);  // Make sure to loop the background music
 
     debugMode = false;
     return super.onLoad();
@@ -110,10 +123,10 @@ class PlatFormerGameDev extends FlameGame
     cam.follow(player);
   }
 
-  /// Handles collecting in-game items dynamically
   void collectItem(dynamic item) {
     if (item is Coin) {
       coins++;
+      FlameAudio.play('coinpickup.wav', volume: playSounds ? soundVolume : 1.0);
     } else if (item is Gold) {
       gold++;
     } else if (item is Coconut) {
@@ -129,6 +142,8 @@ class PlatFormerGameDev extends FlameGame
     overlays.remove('GameOver');
     overlays.remove('LevelComplete');
 
+    FlameAudio.bgm.stop();  // Stop background music when resetting
+
     score = 0;
     coins = 0;
     coconut = 0;
@@ -137,6 +152,9 @@ class PlatFormerGameDev extends FlameGame
 
     removeAll(children);  // Clears all game components before reloading
     loadGame(activeLevel);
+
+    // Start background music again
+    FlameAudio.bgm.play('background_music.mp3', volume: 0.5);  // Ensure it loops after reset
   }
 
   /// Saves the current game state

@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const AuthWrapper(),
         '/login': (context) => LoginScreen(),
         '/splash': (context) => PlatformerSplash(),
-        '/settings': (context) => SettingsOverlay(),
+        '/settings': (context) =>SettingsOverlay(),
       },
     );
   }

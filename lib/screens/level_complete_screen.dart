@@ -1,3 +1,4 @@
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/game_screen.dart';
@@ -29,6 +30,15 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen>
   @override
   void initState() {
     super.initState();
+    
+    // Play Level Complete Sound
+    try {
+      FlameAudio.play('levelcomplete.wav', volume: 1.0);
+      print("Playing level complete sound.");
+    } catch (e) {
+      print("Error playing level complete sound: $e");
+    }
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1000),
       vsync: this,
