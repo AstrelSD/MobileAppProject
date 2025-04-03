@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
@@ -31,6 +32,8 @@ class PlatFormerGameDev extends FlameGame
   int coins = 0;
   int coconut = 0;
   int lives = 3;
+  bool playSounds = false;
+  double soundVolume = 1.0;
 
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
@@ -110,45 +113,48 @@ class PlatFormerGameDev extends FlameGame
   }
 
   /// Resets the game and reloads the level
-void resetGame() {
-  // Remove only non-essential components like obstacles, enemies, etc.
-  overlays.remove('GameOver');
-  overlays.remove('LevelComplete');
-  
-  // If you have a collection of non-player components, you can remove them selectively
-  // e.g. removeAllObstacles() or removeAllEnemies() if you have such methods
+  void resetGame() {
+    // Remove only non-essential components like obstacles, enemies, etc.
+    overlays.remove('GameOver');
+    overlays.remove('LevelComplete');
 
-  // Reset the player position and any other properties
-  //player.position = initialPlayerPosition; // Reset the player position
-  //player.resetHealth(); // If you have a health or state reset for the player
-  
-  // Optionally reset the game state (score, coins, etc.)
-  score = 0;
-  coins = 0;
-  coconut = 0;
-  lives = 3;
+    // If you have a collection of non-player components, you can remove them selectively
+    // e.g. removeAllObstacles() or removeAllEnemies() if you have such methods
 
-  // Reload the active level (or reset any level-specific data)
-  loadGame(activeLevel);
+    // Reset the player position and any other properties
+    //player.position = initialPlayerPosition; // Reset the player position
+    //player.resetHealth(); // If you have a health or state reset for the player
 
-  // Add the player back to the game (if needed)
-  add(player);
-  
-  // Optionally, you can also reset any additional elements like UI states or game timers
-}
+    // Optionally reset the game state (score, coins, etc.)
+    score = 0;
+    coins = 0;
+    coconut = 0;
+    lives = 3;
+
+    // Reload the active level (or reset any level-specific data)
+    loadGame(activeLevel);
+
+    // Add the player back to the game (if needed)
+    add(player);
+
+    // Optionally, you can also reset any additional elements like UI states or game timers
+  }
 
   /// Saves the current game state
   Future<void> saveGame(int slot) async {
-    await saveManager.saveGame(slot, GameState(
-      level: int.parse(activeLevel.levelName),
-      score: score,
-      coins: coins,
-      coconut: coconut,
-      lives: lives,
-      character: character,
-      timestamp: DateTime.now().toUtc(), // Save the current timestamp
-    ));
+    await saveManager.saveGame(
+        slot,
+        GameState(
+          level: int.parse(activeLevel.levelName),
+          score: score,
+          coins: coins,
+          coconut: coconut,
+          lives: lives,
+          character: character,
+          timestamp: DateTime.now().toUtc(), // Save the current timestamp
+        ));
   }
+
   void addJoystick() {
     final knob = SpriteComponent(
       sprite: Sprite(images.fromCache('HUD/Knob.png')),
@@ -179,6 +185,7 @@ void resetGame() {
       onPressed: () {
         if (playerReference != null && playerReference!.isOnGround) {
           playerReference!.jump();
+          FlameAudio.play('jump.wav', volume: 1.0);
         }
       },
     );
