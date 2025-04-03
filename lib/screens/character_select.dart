@@ -100,7 +100,7 @@ class CharacterSelect extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => GameScreen(
-                                          initialLevel: 'level3',
+                                          initialLevel: 'level1',
                                           character: character['name']!,
                                         ),
                                       ),

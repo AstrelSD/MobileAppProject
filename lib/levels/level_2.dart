@@ -5,8 +5,9 @@ import 'package:mobile_app_roject/actors/character.dart';
 import 'dart:async'; // Add this for Completer
 
 class Level2 extends Level {
-  Level2({required super.character}) : super(activeLevel: "level2_map.tmx");
+  Level2({required super.character}) : super(activeLevel: "level2.tmx");
   final Completer<void> _completer = Completer(); 
+  
 
   @override
   Future<void> onLoad() async {
