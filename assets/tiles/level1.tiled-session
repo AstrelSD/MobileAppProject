@@ -8,13 +8,13 @@
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
-        "/Users/anusara/My Drive/Flutter/Game/Game 250401/MobileAppProject/assets/tiles/MAD.tsx": {
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/MAD.tsx": {
             "scaleInDock": 1
         },
-        "/Users/anusara/My Drive/Flutter/Game/Game 250401/MobileAppProject/assets/tiles/level1 tileset.tsx": {
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/level1 tileset.tsx": {
             "scaleInDock": 0.9633
         },
-        "/Users/anusara/My Drive/Flutter/Game/Game 250401/MobileAppProject/assets/tiles/level1.tmx": {
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/level1.tmx": {
             "scale": 0.58,
             "selectedLayer": 0,
             "viewCenter": {
@@ -55,15 +55,15 @@
             "scaleInEditor": 1
         }
     },
-    "last.externalTilesetPath": "/Users/anusara/My Drive/Flutter/Game/Game 250401 2/MobileAppProject/assets/tiles",
-    "last.imagePath": "/Users/anusara/My Drive/Flutter/Game/Game 250401 2/MobileAppProject/assets/Terrain",
+    "last.externalTilesetPath": "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles",
+    "last.imagePath": "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/Terrain",
     "openFiles": [
     ],
     "project": "level1.tiled-project",
     "recentFiles": [
         "level1_road_signs.tsx",
         "level1 tileset 2.tsx",
-        "/Users/anusara/My Drive/Flutter/Game/Game 250401/MobileAppProject/assets/tiles/level1.tmx",
+        "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles/level1.tmx",
         "level1.tmx",
         "level1 tileset2.tsx"
     ],

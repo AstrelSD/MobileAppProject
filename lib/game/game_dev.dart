@@ -6,6 +6,9 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
+import 'package:mobile_app_roject/actors/collectibles/gold.dart';
+import 'package:mobile_app_roject/actors/collectibles/coin.dart';
+import 'package:mobile_app_roject/actors/collectibles/coconut.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:mobile_app_roject/levels/level_1.dart';
 import 'package:mobile_app_roject/levels/level_2.dart';
@@ -27,10 +30,12 @@ class PlatFormerGameDev extends FlameGame
   final String initialLevel;
   final String character;
   late Character player;
+  
   int score = 0;
   int coins = 0;
   int coconut = 0;
   int lives = 3;
+  int gold = 0;
 
   late final JoystickComponent joystick;
   late final ButtonComponent jumpButton;
@@ -51,17 +56,11 @@ class PlatFormerGameDev extends FlameGame
     await images.loadAllImages();
 
     overlays.addEntry('GameOver', (context, game) {
-      return GameOverScreen(
-        initialLevel: initialLevel,
-        character: character,
-      );
+      return GameOverScreen(initialLevel: initialLevel, character: character);
     });
 
     overlays.addEntry('LevelComplete', (context, game) {
-      return LevelCompleteScreen(
-        initialLevel: initialLevel,
-        character: character,
-      );
+      return LevelCompleteScreen(initialLevel: initialLevel, character: character);
     });
 
     add(RectangleComponent(
@@ -83,12 +82,10 @@ class PlatFormerGameDev extends FlameGame
   }
 
   Future<Level> loadLevel(String level) async {
-    if (level == '1') {
-      return Level1(character: character);
-    } else if (level == '2') {
-      return Level2(character: character);
-    } else {
-      return Level3(character: character);
+    switch (level) {
+      case '1': return Level1(character: character);
+      case '2': return Level2(character: character);
+      default:  return Level3(character: character);
     }
   }
 
@@ -109,33 +106,33 @@ class PlatFormerGameDev extends FlameGame
     cam.follow(player);
   }
 
+  /// Handles collecting in-game items dynamically
+  void collectItem(dynamic item) {
+    if (item is Coin) {
+      coins++;
+    } else if (item is Gold) {
+      gold++;
+    } else if (item is Coconut) {
+      coconut++;
+    }
+
+    item.removeFromParent(); // Remove collected item from the game
+  }
+
   /// Resets the game and reloads the level
-void resetGame() {
-  // Remove only non-essential components like obstacles, enemies, etc.
-  overlays.remove('GameOver');
-  overlays.remove('LevelComplete');
-  
-  // If you have a collection of non-player components, you can remove them selectively
-  // e.g. removeAllObstacles() or removeAllEnemies() if you have such methods
+  void resetGame() {
+    overlays.remove('GameOver');
+    overlays.remove('LevelComplete');
 
-  // Reset the player position and any other properties
-  //player.position = initialPlayerPosition; // Reset the player position
-  //player.resetHealth(); // If you have a health or state reset for the player
-  
-  // Optionally reset the game state (score, coins, etc.)
-  score = 0;
-  coins = 0;
-  coconut = 0;
-  lives = 3;
+    score = 0;
+    coins = 0;
+    coconut = 0;
+    gold = 0;
+    lives = 3;
 
-  // Reload the active level (or reset any level-specific data)
-  loadGame(activeLevel);
-
-  // Add the player back to the game (if needed)
-  add(player);
-  
-  // Optionally, you can also reset any additional elements like UI states or game timers
-}
+    removeAll(children);  // Clears all game components before reloading
+    loadGame(activeLevel);
+  }
 
   /// Saves the current game state
   Future<void> saveGame(int slot) async {
@@ -146,9 +143,11 @@ void resetGame() {
       coconut: coconut,
       lives: lives,
       character: character,
-      timestamp: DateTime.now().toUtc(), // Save the current timestamp
+      gold: gold,
+      timestamp: DateTime.now().toUtc(),
     ));
   }
+
   void addJoystick() {
     final knob = SpriteComponent(
       sprite: Sprite(images.fromCache('HUD/Knob.png')),
@@ -224,12 +223,10 @@ void resetGame() {
   }
 
   void handleKeyboardMovement() {
-    final isLeftKeyPressed =
-        keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
-            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed =
-        keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
-            keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
+    final isLeftKeyPressed = keyboardKeysPressed.contains(LogicalKeyboardKey.keyA) ||
+        keyboardKeysPressed.contains(LogicalKeyboardKey.arrowLeft);
+    final isRightKeyPressed = keyboardKeysPressed.contains(LogicalKeyboardKey.keyD) ||
+        keyboardKeysPressed.contains(LogicalKeyboardKey.arrowRight);
 
     if (isLeftKeyPressed && isRightKeyPressed) {
       playerReference!.stopMoving();

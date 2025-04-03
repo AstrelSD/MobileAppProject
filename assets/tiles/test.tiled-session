@@ -1,0 +1,40 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles/beach.tmx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles/level2_map.tmx": {
+            "scale": 0.9469,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 318.4074347872004,
+                "y": 305.7345020593516
+            }
+        },
+        "level2_map.tmx": {
+            "scale": 0.34,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 939.705882352941,
+                "y": 451.47058823529403
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/Terrain",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 250,
+    "openFiles": [
+    ],
+    "project": "test.tiled-project",
+    "recentFiles": [
+        "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles/level2_map.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}

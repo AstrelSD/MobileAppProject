@@ -5,6 +5,7 @@ import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 import 'package:mobile_app_roject/screens/pause/pause_overlay.dart';
 import 'package:mobile_app_roject/models/game_state.dart';
 
+
 class GameScreen extends StatefulWidget {
   final String initialLevel;
   final String character;
@@ -81,6 +82,7 @@ class _GameScreenState extends State<GameScreen> {
                     level: int.tryParse(game.activeLevel.levelName) ?? 1,
                     score: game.score,
                     coins: game.coins,
+                    gold: game.gold,
                     coconut: game.coconut,
                     lives: game.lives,
                     character: widget.character,

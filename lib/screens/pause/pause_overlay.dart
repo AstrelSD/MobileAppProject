@@ -13,6 +13,7 @@ class PauseOverlay extends StatefulWidget {
   final int score;
   final int coins;
   final int coconut;
+  final int gold;
   final int lives;
   final String character;
   final SaveManager saveManager;
@@ -25,6 +26,7 @@ class PauseOverlay extends StatefulWidget {
     required this.level,
     required this.score,
     required this.coins,
+    required this.gold,
     required this.coconut,
     required this.lives,
     required this.character,
@@ -55,6 +57,7 @@ class _PauseOverlayState extends State<PauseOverlay> {
       level: widget.level,
       score: widget.score,
       coins: widget.coins,
+      gold: widget.gold,
       coconut: widget.coconut,
       character: widget.character,
       lives: widget.lives,
