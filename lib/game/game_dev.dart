@@ -119,7 +119,8 @@ class PlatFormerGameDev extends FlameGame
       coconut++;
     }
 
-    item.removeFromParent(); // Remove collected item from the game
+    item.removeFromParent();
+    hud.updateHud(coins, gold, coconut); 
   }
 
   /// Resets the game and reloads the level
