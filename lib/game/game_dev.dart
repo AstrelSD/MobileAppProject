@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/actors/character.dart';
@@ -35,6 +36,8 @@ class PlatFormerGameDev extends FlameGame
   int coins = 0;
   int coconut = 0;
   int lives = 3;
+  bool playSounds = false;
+  double soundVolume = 1.0;
   int gold = 0;
 
   late final JoystickComponent joystick;
@@ -178,6 +181,7 @@ class PlatFormerGameDev extends FlameGame
       onPressed: () {
         if (playerReference != null && playerReference!.isOnGround) {
           playerReference!.jump();
+          FlameAudio.play('jump.wav', volume: 1.0);
         }
       },
     );

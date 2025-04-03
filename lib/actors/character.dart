@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/collisions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
@@ -95,6 +96,7 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
       isJumping = true;
       current = CharacterState.jump;
     }
+    FlameAudio.play('jump.wav', volume: 1.0);
   }
 
   @override

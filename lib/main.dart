@@ -6,6 +6,7 @@ import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 import 'firebase_options.dart';
 import 'package:mobile_app_roject/screens/platformer_splash.dart';
 import 'package:mobile_app_roject/screens/login_screen.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +16,8 @@ void main() async {
 
   Flame.device.fullScreen();
   Flame.device.setLandscape();
+
+    await FlameAudio.audioCache.loadAll(['jump.wav']);
 
   runApp(const MyApp());
 }
