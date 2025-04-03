@@ -9,6 +9,7 @@ class GameHud extends PositionComponent with HasGameRef<PlatFormerGameDev> {
   late TextComponent coinText;
   late TextComponent goldText;
   late TextComponent coconutText;
+  late TextComponent timerText;
   
   
   late Sprite coinIcon;
@@ -19,11 +20,12 @@ class GameHud extends PositionComponent with HasGameRef<PlatFormerGameDev> {
   late SpriteComponent goldIconComponent;
   late SpriteComponent coconutIconComponent;
 
+  double _timer = 0.0;
+
   @override
   Future<void> onLoad() async {
 
-
-    final hudBackground = RectangleComponent(
+  final hudBackground = RectangleComponent(
   size: Vector2(gameRef.size.x, 36),
   position: Vector2.zero(),
   paint: Paint()..color = Colors.black.withOpacity(0.5),
@@ -111,6 +113,25 @@ add(hudBackground);
       ),
     );
 
+    timerText = TextComponent(
+      text: '00:00',
+      position: Vector2(gameRef.size.x - 80, 10),
+      textRenderer: TextPaint(
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+          fontFamily: 'PixelFont',
+          shadows: [
+            Shadow(
+              color: Colors.black,
+              blurRadius: 2,
+              offset: Offset(1, 1),
+            ),
+          ],
+        ),
+      ),
+    );
+
     // Add all components to HUD
     addAll([
       coinIconComponent,
@@ -119,7 +140,18 @@ add(hudBackground);
       coinText,
       goldText,
       coconutText,
+      timerText,
     ]);
+  }
+
+  void update(double dt) {
+    super.update(dt);
+    // Update the timer
+    _timer += dt;
+    int minutes = _timer ~/ 60;
+    int seconds = _timer.toInt() % 60;
+    timerText.text =
+        '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
   void updateHud(int coins, int gold, int coconuts) {
@@ -127,4 +159,5 @@ add(hudBackground);
     goldText.text = '$gold';
     coconutText.text = '$coconuts';
   }
+  
 }
