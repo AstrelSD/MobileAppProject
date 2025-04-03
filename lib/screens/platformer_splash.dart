@@ -13,7 +13,7 @@ class PlatformerSplash extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: Image.asset("assets/images/Forest.png"),
+            child: Image.asset("assets/images/game_logo.png"),
           ),
           const SizedBox(height: 20),
         ],
