@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_app_roject/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:mobile_app_roject/screens/login_screen.dart';
 
 class SettingsOverlay extends StatefulWidget {
-  const SettingsOverlay ({super.key});
+  const SettingsOverlay({super.key});
 
   @override
   State<SettingsOverlay> createState() => _SettingsOverlayState();
@@ -15,6 +16,30 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
   bool music = true;
   bool sound = true;
 
+  // Method to update sound based on the sound switch value
+  void _updateSound(bool newSoundSetting) {
+    setState(() {
+      sound = newSoundSetting;  // Update sound state
+      if (sound && music) {
+        FlameAudio.bgm.resume();  // Resume background music if both sound and music are on
+      } else {
+        FlameAudio.bgm.pause();  // Pause background music if either is off
+      }
+    });
+  }
+
+  // Method to update music based on the music switch value
+  void _updateMusic(bool newMusicSetting) {
+    setState(() {
+      music = newMusicSetting;  // Update music state
+      if (sound && music) {
+        FlameAudio.bgm.resume();  // Resume background music if both sound and music are on
+      } else {
+        FlameAudio.bgm.pause();  // Pause background music if either is off
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -25,14 +50,14 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
           color: Colors.yellow[100],
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-              color: Colors.brown[700]!,
-              width: 4.0
+            color: Colors.brown[700]!,
+            width: 4.0,
           ),
           boxShadow: [
             BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
             ),
           ],
         ),
@@ -44,24 +69,23 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
               Text(
                 'Settings',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
-                    color: Colors.brown[700]
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                  color: Colors.brown[700],
                 ),
               ),
               const SizedBox(height: 20),
-              //Game mode
+              // Game mode
               _settingsRow(
                 icon: Icons.videogame_asset,
                 label: 'Game Mode',
                 content: DropdownButton<String>(
                   value: gameMode,
-                  style: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.black),
+                  style: const TextStyle(fontSize: 18, color: Colors.black),
                   icon: Icon(
                     Icons.arrow_drop_down,
-                    color: Colors.brown[700],),
+                    color: Colors.brown[700],
+                  ),
                   iconSize: 30,
                   underline: const SizedBox(),
                   items: <String>['Easy', 'Normal', 'Hard']
@@ -76,61 +100,67 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                   },
                 ),
               ),
-              //Notifications
+              // Notifications
               _settingsRow(
-                  icon: Icons.notifications,
-                  label: 'Notifications',
-                  content: Switch(
-                    value: notifications,
-                    onChanged: (bool newValue) {
-                      setState(() => notifications = newValue);
-                    },
-                    activeColor: Colors.green[400],
-                  )
+                icon: Icons.notifications,
+                label: 'Notifications',
+                content: Switch(
+                  value: notifications,
+                  onChanged: (bool newValue) {
+                    setState(() => notifications = newValue);
+                  },
+                  activeColor: Colors.green[400],
+                ),
               ),
-              //Music
+              // Music
               _settingsRow(
-                  icon: Icons.music_note,
-                  label: 'Music',
-                  content: Switch(
-                    value: music,
-                    onChanged: (bool newValue) {
-                      setState(() => music = newValue);
-                    },
-                    activeColor: Colors.green[400],
-                  )
+                icon: Icons.music_note,
+                label: 'Music',
+                content: Switch(
+                  value: music,
+                  onChanged: (bool newValue) {
+                    _updateMusic(newValue);  // Update music when toggled
+                  },
+                  activeColor: Colors.green[400],
+                ),
               ),
-              //Sound
+              // Sound
               _settingsRow(
-                  icon: Icons.volume_up,
-                  label: 'Sound',
-                  content: Switch(
-                    value: sound,
-                    onChanged: (bool newValue) {
-                      setState(() => sound = newValue);
-                    },
-                    activeColor: Colors.green[400],
-                  )
+                icon: Icons.volume_up,
+                label: 'Sound',
+                content: Switch(
+                  value: sound,
+                  onChanged: (bool newValue) {
+                    _updateSound(newValue);  // Update sound when toggled
+                  },
+                  activeColor: Colors.green[400],
+                ),
               ),
+              // Help
               _settingsRow(
-                  icon: Icons.help_outline,
-                  label: 'Help',
-                  content: IconButton(
-                    icon: Icon(Icons.help,
-                        color: Colors.orange[400],
-                        size: 30),
-                    onPressed: () => print('Help pressed'),
-                  )
+                icon: Icons.help_outline,
+                label: 'Help',
+                content: IconButton(
+                  icon: Icon(
+                    Icons.help,
+                    color: Colors.orange[400],
+                    size: 30,
+                  ),
+                  onPressed: () => print('Help pressed'),
+                ),
               ),
+              // Log out
               _settingsRow(
-                  icon: Icons.help_outline,
-                  label: 'Log out',
-                  content: IconButton(
-                    icon: Icon(Icons.logout,
-                        color: Colors.red[400],
-                        size: 30),
-                    onPressed: _confirmLogout,
-                  )
+                icon: Icons.help_outline,
+                label: 'Log out',
+                content: IconButton(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.red[400],
+                    size: 30,
+                  ),
+                  onPressed: _confirmLogout,
+                ),
               ),
               Center(
                 child: ElevatedButton(
@@ -143,9 +173,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                   },
                   child: const Text(
                     'Save Settings',
-                    style: TextStyle(color:
-                    Colors.white,
-                        fontSize: 18),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
               ),
@@ -155,6 +183,8 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
       ),
     );
   }
+
+  // Helper method to create settings rows
   Widget _settingsRow({
     required IconData icon,
     required String label,
@@ -175,12 +205,14 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
               ),
             ],
           ),
-          content
+          content,
         ],
       ),
     );
   }
- void _confirmLogout() {
+
+  // Logout confirmation dialog
+  void _confirmLogout() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -202,9 +234,11 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
     );
   }
 
-void _logout() async {
-  await FirebaseAuth.instance.signOut(); 
-  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
-}
-
+  // Perform logout action
+  void _logout() async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
+  }
 }
