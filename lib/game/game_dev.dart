@@ -85,12 +85,15 @@ class PlatFormerGameDev extends FlameGame
   }
 
   Future<Level> loadLevel(String level) async {
-    switch (level) {
-      case '1': return Level1(character: character);
-      case '2': return Level2(character: character);
-      default:  return Level3(character: character);
-    }
+  // Extract numeric part from 'level1', 'level2', etc.
+  String levelNumber = level.replaceFirst('level', '');
+
+  switch (levelNumber) {
+    case '1': return Level1(character: character);
+    case '2': return Level2(character: character);
+    default:  return Level3(character: character);
   }
+}
 
   Future<void> loadGame(Level level) async {
     activeLevel = level;
