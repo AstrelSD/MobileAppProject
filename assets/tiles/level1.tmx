@@ -157,6 +157,6 @@
  </objectgroup>
  <objectgroup id="2" name="object1">
   <object id="406" name="Player" type="Player" x="9.87177" y="112.628" width="31.5" height="31.5"/>
-  <object id="399" name="End" type="End" x="3935.73" y="110.802" width="32.0045" height="31.8468"/>
+  <object id="399" name="END" type="END" x="3929.3" y="96.4816" width="47.7861" height="47.3362"/>
  </objectgroup>
 </map>
