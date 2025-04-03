@@ -18,12 +18,98 @@
                 "y": 305.7345020593516
             }
         },
-        "level2_map.tmx": {
-            "scale": 0.34,
+        "/Users/Angel/Downloads/MAD.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/Nkulun.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/Terrain 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/bridge.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level1 (1).tmx": {
+            "scale": 0.1242125,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 939.705882352941,
-                "y": 451.47058823529403
+                "x": 2000.603803964979,
+                "y": 156.98903089463624
+            }
+        },
+        "/Users/Angel/Downloads/level1 tileset 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level1.tmx": {
+            "scale": 0.5372,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3160.833953834698,
+                "y": -99.59046909903202
+            }
+        },
+        "/Users/Angel/Downloads/level1_road_signs.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level3 (2).tmx": {
+            "scale": 0.3854,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 317.85158277114687,
+                "y": 131.03269330565644
+            }
+        },
+        "/Users/Angel/Downloads/level3.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 0.7062,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2137.4964599263662,
+                "y": 214.52846219201362
+            }
+        },
+        "/Users/Angel/Downloads/pipes.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/road signs.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/MAD.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/Terrain 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/level3.tmx": {
+            "expandedObjectLayers": [
+                9,
+                2,
+                3
+            ],
+            "scale": 0.9731,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 373.0346315897647,
+                "y": 153.63272017264413
+            }
+        },
+        "beach.tsx": {
+            "dynamicWrapping": false
+        },
+        "level2_map.tmx": {
+            "expandedObjectLayers": [
+                11,
+                7
+            ],
+            "scale": 0.4482,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 2155.28781793842,
+                "y": 409.41543953592145
             }
         }
     },
@@ -33,7 +119,13 @@
     "openFiles": [
     ],
     "project": "test.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/level3.tmx",
+        "/Users/Angel/Downloads/level3.tmx",
+        "/Users/Angel/Downloads/level3 (2).tmx",
+        "/Users/Angel/Downloads/level1 (1).tmx",
+        "/Users/Angel/Downloads/level1.tmx",
         "/Users/Angel/Desktop/level2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx"
