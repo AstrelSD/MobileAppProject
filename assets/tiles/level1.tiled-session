@@ -1,0 +1,76 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/MAD.tsx": {
+            "scaleInDock": 1
+        },
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/level1 tileset.tsx": {
+            "scaleInDock": 0.9633
+        },
+        "C:/Users/jaksh/Downloads/MobileAppProject/assets/tiles/level1.tmx": {
+            "scale": 0.58,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 325.86206896551727,
+                "y": 225.86206896551727
+            }
+        },
+        "MAD.tsx": {
+            "scaleInDock": 1
+        },
+        "Terrain 2.tsx": {
+            "scaleInDock": 0.5155
+        },
+        "level1 tileset 2.tsx": {
+            "scaleInDock": 1.5524,
+            "scaleInEditor": 1
+        },
+        "level1 tileset.tsx": {
+            "scaleInDock": 1
+        },
+        "level1 tileset2.tsx": {
+            "scaleInDock": 0.9868,
+            "scaleInEditor": 1
+        },
+        "level1.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.21,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 149.58677685950417,
+                "y": 183.47107438016528
+            }
+        },
+        "level1_road_signs.tsx": {
+            "scaleInDock": 1.5323,
+            "scaleInEditor": 1
+        }
+    },
+    "last.externalTilesetPath": "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles",
+    "last.imagePath": "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/Terrain",
+    "openFiles": [
+    ],
+    "project": "level1.tiled-project",
+    "recentFiles": [
+        "level1_road_signs.tsx",
+        "level1 tileset 2.tsx",
+        "C:/Users/jaksh/Downloads/MobileAppProject/MobileAppProject/assets/tiles/level1.tmx",
+        "level1.tmx",
+        "level1 tileset2.tsx"
+    ],
+    "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

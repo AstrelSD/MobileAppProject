@@ -1,0 +1,158 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "level2_map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "/Users/Angel/Desktop/Game Project/Tiles - Beach.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Desktop/level2.tmx": {
+            "scale": 0.9469,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 318.4074347872004,
+                "y": 305.7345020593516
+            }
+        },
+        "/Users/Angel/Downloads/MAD.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/Nkulun.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/Terrain 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/bridge.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level1 (1).tmx": {
+            "scale": 0.1242125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2000.6038039649793,
+                "y": 261.6483848243937
+            }
+        },
+        "/Users/Angel/Downloads/level1 tileset 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level1.tmx": {
+            "scale": 0.5372,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 3160.833953834698,
+                "y": -99.59046909903202
+            }
+        },
+        "/Users/Angel/Downloads/level1_road_signs.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/level3 (2).tmx": {
+            "expandedObjectLayers": [
+                2,
+                3
+            ],
+            "scale": 0.8046,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 2831.841909023117,
+                "y": 213.14939100173999
+            }
+        },
+        "/Users/Angel/Downloads/level3 (3).tmx": {
+            "expandedObjectLayers": [
+                9,
+                2,
+                3
+            ],
+            "scale": 0.2158,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 993.9759036144578,
+                "y": -111.21408711770164
+            }
+        },
+        "/Users/Angel/Downloads/level3.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 0.7062,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2137.4964599263662,
+                "y": 214.52846219201362
+            }
+        },
+        "/Users/Angel/Downloads/pipes.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Downloads/road signs.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/MAD.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/Terrain 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/level3.tmx": {
+            "expandedObjectLayers": [
+                9,
+                2,
+                3
+            ],
+            "scale": 0.9731,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 373.0346315897647,
+                "y": 153.63272017264413
+            }
+        },
+        "beach.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1.0232,
+            "scaleInEditor": 1
+        },
+        "level2_map.tmx": {
+            "expandedObjectLayers": [
+                9,
+                7
+            ],
+            "scale": 0.4827,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 4562.875492024031,
+                "y": 239.2790553138595
+            }
+        }
+    },
+    "last.imagePath": "/Users/Angel/FlutterDev/game_app_level2/assets/Terrain",
+    "map.lastUsedFormat": "tmx",
+    "map.width": 250,
+    "mapScene.enableWorlds": true,
+    "openFiles": [
+        "beach.tsx",
+        "level2_map.tmx"
+    ],
+    "project": "test.tiled-project",
+    "property.type": "bool",
+    "recentFiles": [
+        "beach.tsx",
+        "level2_map.tmx",
+        "/Users/Angel/Downloads/level3 (3).tmx",
+        "/Users/Angel/Downloads/level3 (2).tmx",
+        "/Users/Angel/Downloads/level1 (1).tmx",
+        "/Users/Angel/Library/Containers/net.whatsapp.WhatsApp/Data/tmp/documents/BC5E932A-6C43-4DD6-A299-48420522F7C6/level3.tmx",
+        "/Users/Angel/Downloads/level3.tmx",
+        "/Users/Angel/Downloads/level1.tmx",
+        "/Users/Angel/Desktop/level2.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx"
+}
