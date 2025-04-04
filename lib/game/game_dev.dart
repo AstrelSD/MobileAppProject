@@ -66,6 +66,7 @@ class PlatFormerGameDev extends FlameGame
       'levelcomplete.wav',
       'jump.wav',
       'background_music.mp3', // Make sure to load the background music
+      'falling.wav',
     ]);
 
     overlays.addEntry('GameOver', (context, game) {
