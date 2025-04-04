@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/platformer_main_menu.dart';
 import 'package:mobile_app_roject/screens/game_screen.dart';
+import 'package:flame_audio/flame_audio.dart';
 
 class GameOverScreen extends StatefulWidget {
   final String initialLevel;
@@ -32,6 +33,13 @@ class _GameOverScreenState extends State<GameOverScreen>
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
+
+        try {
+      FlameAudio.play('falling.wav', volume: 1.0);
+      print("Playing falling sound.");
+    } catch (e) {
+      print("Error playing falling sound: $e");
+    }
 
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
