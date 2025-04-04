@@ -115,6 +115,41 @@
                 "y": 153.63272017264413
             }
         },
+        "/Users/Angel/MobileAppProject/assets/tiles/MAD.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/Nkulun.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/Terrain 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/bridge.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/level1 tileset 2.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/level1.tmx": {
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.2122,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 326.26629269097515,
+                "y": 158.3897046691965
+            }
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/level1_road_signs.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/pipes.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/Angel/MobileAppProject/assets/tiles/road signs.tsx": {
+            "scaleInDock": 1
+        },
         "beach.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1.0232,
@@ -123,13 +158,14 @@
         "level2_map.tmx": {
             "expandedObjectLayers": [
                 9,
-                7
+                7,
+                11
             ],
-            "scale": 0.4827,
-            "selectedLayer": 2,
+            "scale": 0.5754,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 4562.875492024031,
-                "y": 239.2790553138595
+                "x": 2534.7584289190127,
+                "y": 257.21237400069515
             }
         }
     },
@@ -144,6 +180,7 @@
     "project": "test.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "/Users/Angel/MobileAppProject/assets/tiles/level1.tmx",
         "beach.tsx",
         "level2_map.tmx",
         "/Users/Angel/Downloads/level3 (3).tmx",
