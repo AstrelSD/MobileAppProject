@@ -6,6 +6,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:flutter/services.dart';
 import 'package:mobile_app_roject/game/game_dev.dart';
 import 'package:mobile_app_roject/levels/base_level.dart';
+import 'package:mobile_app_roject/screens/settings/settings_overlay.dart';
 
 enum CharacterState { idle, running, jump }
 
@@ -92,11 +93,12 @@ class Character extends SpriteAnimationGroupComponent<CharacterState>
   void jump() {
     if (isOnGround && !isJumping) {
       velocity.y = jumpForce;
+      SettingsOverlay.playSoundEffect('jump.wav');
       isOnGround = false;
       isJumping = true;
       current = CharacterState.jump;
     }
-    FlameAudio.play('jump.wav', volume: 1.0);
+
   }
 
   @override

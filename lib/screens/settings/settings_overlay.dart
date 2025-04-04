@@ -1,42 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app_roject/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame_audio/flame_audio.dart';
-import 'package:mobile_app_roject/screens/login_screen.dart';
 
 class SettingsOverlay extends StatefulWidget {
   const SettingsOverlay({super.key});
 
   @override
   State<SettingsOverlay> createState() => _SettingsOverlayState();
+
+  // Global access to sound settings
+  static bool soundEnabled = true;
+
+  // Method to play sound effects globally
+  static void playSoundEffect(String file) {
+    if (soundEnabled) {
+      FlameAudio.play(file, volume: 1.0);
+    }
+  }
 }
 
 class _SettingsOverlayState extends State<SettingsOverlay> {
   String gameMode = 'Normal';
   bool notifications = true;
-  bool music = true;
-  bool sound = true;
+  bool music = true; 
+  bool sound = SettingsOverlay.soundEnabled; // Get initial sound setting
 
-  // Method to update sound based on the sound switch value
-  void _updateSound(bool newSoundSetting) {
+  @override
+  void initState() {
+    super.initState();
+    _applySoundSettings();
+  }
+
+  void _applySoundSettings() {
+    if (music) {
+      FlameAudio.bgm.play('background_music.mp3', volume: 0.5);
+    } else {
+      FlameAudio.bgm.stop();
+    }
+  }
+
+  void _toggleMusic(bool newValue) {
     setState(() {
-      sound = newSoundSetting;  // Update sound state
-      if (sound && music) {
-        FlameAudio.bgm.resume();  // Resume background music if both sound and music are on
-      } else {
-        FlameAudio.bgm.pause();  // Pause background music if either is off
-      }
+      music = newValue;
+      _applySoundSettings();
     });
   }
 
-  // Method to update music based on the music switch value
-  void _updateMusic(bool newMusicSetting) {
+  void _toggleSound(bool newValue) {
     setState(() {
-      music = newMusicSetting;  // Update music state
-      if (sound && music) {
-        FlameAudio.bgm.resume();  // Resume background music if both sound and music are on
-      } else {
-        FlameAudio.bgm.pause();  // Pause background music if either is off
-      }
+      sound = newValue;
+      SettingsOverlay.soundEnabled = newValue; // Update global sound setting
     });
   }
 
@@ -49,16 +63,12 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
         decoration: BoxDecoration(
           color: Colors.yellow[100],
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.brown[700]!,
-            width: 4.0,
-          ),
+          border: Border.all(color: Colors.brown[700]!, width: 4.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 7,
-            ),
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7),
           ],
         ),
         padding: const EdgeInsets.all(16.0),
@@ -69,23 +79,19 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
               Text(
                 'Settings',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                  color: Colors.brown[700],
-                ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.brown[700]),
               ),
               const SizedBox(height: 20),
-              // Game mode
+
               _settingsRow(
                 icon: Icons.videogame_asset,
                 label: 'Game Mode',
                 content: DropdownButton<String>(
                   value: gameMode,
                   style: const TextStyle(fontSize: 18, color: Colors.black),
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    color: Colors.brown[700],
-                  ),
+                  icon: Icon(Icons.arrow_drop_down, color: Colors.brown[700]),
                   iconSize: 30,
                   underline: const SizedBox(),
                   items: <String>['Easy', 'Normal', 'Hard']
@@ -100,7 +106,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                   },
                 ),
               ),
-              // Notifications
+
               _settingsRow(
                 icon: Icons.notifications,
                 label: 'Notifications',
@@ -112,61 +118,48 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                   activeColor: Colors.green[400],
                 ),
               ),
-              // Music
+
               _settingsRow(
                 icon: Icons.music_note,
                 label: 'Music',
                 content: Switch(
                   value: music,
-                  onChanged: (bool newValue) {
-                    _updateMusic(newValue);  // Update music when toggled
-                  },
+                  onChanged: _toggleMusic,
                   activeColor: Colors.green[400],
                 ),
               ),
-              // Sound
+
               _settingsRow(
                 icon: Icons.volume_up,
-                label: 'Sound',
+                label: 'Sound Effects',
                 content: Switch(
                   value: sound,
-                  onChanged: (bool newValue) {
-                    _updateSound(newValue);  // Update sound when toggled
-                  },
+                  onChanged: _toggleSound,
                   activeColor: Colors.green[400],
                 ),
               ),
-              // Help
+
               _settingsRow(
                 icon: Icons.help_outline,
                 label: 'Help',
                 content: IconButton(
-                  icon: Icon(
-                    Icons.help,
-                    color: Colors.orange[400],
-                    size: 30,
-                  ),
+                  icon: Icon(Icons.help, color: Colors.orange[400], size: 30),
                   onPressed: () => print('Help pressed'),
                 ),
               ),
-              // Log out
+
               _settingsRow(
-                icon: Icons.help_outline,
+                icon: Icons.logout,
                 label: 'Log out',
                 content: IconButton(
-                  icon: Icon(
-                    Icons.logout,
-                    color: Colors.red[400],
-                    size: 30,
-                  ),
+                  icon: Icon(Icons.logout, color: Colors.red[400], size: 30),
                   onPressed: _confirmLogout,
                 ),
               ),
+
               Center(
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[400],
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green[400]),
                   onPressed: () {
                     print('Settings saved');
                     Navigator.of(context).pop();
@@ -184,7 +177,6 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
     );
   }
 
-  // Helper method to create settings rows
   Widget _settingsRow({
     required IconData icon,
     required String label,
@@ -199,19 +191,15 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
             children: [
               Icon(icon, size: 30, color: Colors.brown[700]),
               const SizedBox(width: 10),
-              Text(
-                label,
-                style: const TextStyle(fontSize: 18),
-              ),
+              Text(label, style: const TextStyle(fontSize: 18)),
             ],
           ),
-          content,
+          content
         ],
       ),
     );
   }
 
-  // Logout confirmation dialog
   void _confirmLogout() {
     showDialog(
       context: context,
@@ -234,11 +222,8 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
     );
   }
 
-  // Perform logout action
   void _logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }
