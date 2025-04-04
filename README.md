@@ -1,16 +1,11 @@
-# mobile_app_project
+# Sri Lankan Diaries
 
-A new Flutter project.
+A game app that seamlessly integrates Sri Lankan cultural aesthetics with the nostalgic charm of a retro platformer.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+-> Run the program using an emulator Google Chrome
 
-A few resources to get you started if this is your first Flutter project:
+-> Use any email address (example :- something@gmail.com) along with a 6 character password and press the "Sign Up" button
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+You will then be directed to the main menu where you can start a new game.
