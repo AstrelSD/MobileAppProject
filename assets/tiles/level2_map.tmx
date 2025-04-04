@@ -1,6 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="250" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="380">
  <tileset firstgid="1" source="beach.tsx"/>
+ <objectgroup id="11" name="collectibles">
+  <object id="240" name="Coin" type="Coin" x="1250.31" y="198.354"/>
+  <object id="241" name="Coin" type="Coin" x="1313.98" y="198.974"/>
+  <object id="242" name="Coin" type="Coin" x="1282.76" y="148.885"/>
+  <object id="244" name="Coin" type="Coin" x="1952" y="96"/>
+  <object id="245" name="Coin" type="Coin" x="1920" y="64"/>
+  <object id="246" name="Coin" type="Coin" x="1984" y="128"/>
+  <object id="247" name="Coin" type="Coin" x="2241.82" y="361.241"/>
+  <object id="248" name="Coin" type="Coin" x="2878.41" y="172.457"/>
+  <object id="249" name="Coin" type="Coin" x="2878.41" y="71.893"/>
+  <object id="250" name="Coin" type="Coin" x="2877.79" y="121.566"/>
+  <object id="252" name="Coin" type="Coin" x="4177.78" y="400"/>
+  <object id="253" name="Coin" type="Coin" x="4340.74" y="77.037"/>
+  <object id="254" name="Coin" type="Coin" x="3611.85" y="364.444"/>
+  <object id="255" name="Coin" type="Coin" x="3840" y="94.8148"/>
+  <object id="256" name="Coin" type="Coin" x="6692.17" y="530.487"/>
+  <object id="258" name="Coin" type="Coin" x="6833.39" y="534.43"/>
+  <object id="259" name="Coin" type="Coin" x="6768.53" y="532.563"/>
+  <object id="260" name="Coin" type="Coin" x="6725.62" y="472.042"/>
+  <object id="261" name="Coin" type="Coin" x="6807.82" y="471.272"/>
+  <object id="262" name="Coin" type="Coin" x="6769.42" y="414.133"/>
+  <object id="263" name="Gold" type="Gold" x="1388.39" y="362.286"/>
+  <object id="264" name="Gold" type="Gold" x="1793.43" y="416.292"/>
+  <object id="265" name="Gold" type="Gold" x="2223.22" y="99.0099"/>
+  <object id="266" name="Gold" type="Gold" x="3168" y="128"/>
+  <object id="267" name="Gold" type="Gold" x="3919.84" y="202.894"/>
+  <object id="268" name="Gold" type="Gold" x="3485.78" y="199.568"/>
+  <object id="269" name="Gold" type="Gold" x="4328.95" y="206.22"/>
+  <object id="271" name="Gold" type="Gold" x="4606.69" y="226.177"/>
+  <object id="272" name="Gold" type="Gold" x="5059.04" y="325.96"/>
+  <object id="273" name="Gold" type="Gold" x="5538" y="126.393"/>
+  <object id="274" name="Gold" type="Gold" x="5501.41" y="575.42"/>
+  <object id="275" name="Gold" type="Gold" x="5571.26" y="577.083"/>
+  <object id="276" name="Gold" type="Gold" x="5641.11" y="575.42"/>
+  <object id="277" name="Gold" type="Gold" x="6461.73" y="125.471"/>
+  <object id="278" name="Gold" type="Gold" x="7808" y="64"/>
+  <object id="279" name="Gold" type="Gold" x="7776" y="64"/>
+  <object id="280" name="Gold" type="Gold" x="7845.5" y="64"/>
+  <object id="282" name="Coconut" type="Coconut" x="1133.25" y="298.879"/>
+  <object id="283" name="Coconut" type="Coconut" x="2782.42" y="505.248"/>
+  <object id="284" name="Coconut" type="Coconut" x="2908.28" y="508.731"/>
+  <object id="285" name="Coconut" type="Coconut" x="3041.29" y="510.986"/>
+  <object id="286" name="Coconut" type="Coconut" x="3152.72" y="508.632"/>
+  <object id="287" name="Coconut" type="Coconut" x="3371.49" y="415.436"/>
+  <object id="288" name="Coconut" type="Coconut" x="3757.39" y="204.948"/>
+  <object id="289" name="Coconut" type="Coconut" x="4064" y="64"/>
+  <object id="292" name="Coconut" type="Coconut" x="4636.26" y="411.743"/>
+  <object id="293" name="Coconut" type="Coconut" x="4717.5" y="411.743"/>
+  <object id="294" name="Coconut" type="Coconut" x="4678.31" y="460.614"/>
+  <object id="295" name="Coconut" type="Coconut" x="5088" y="64"/>
+  <object id="296" name="Coconut" type="Coconut" x="5120" y="96"/>
+  <object id="297" name="Coconut" type="Coconut" x="5152" y="96"/>
+  <object id="298" name="Coconut" type="Coconut" x="5184" y="96"/>
+  <object id="345" name="Coconut" type="Coconut" x="5184" y="96"/>
+  <object id="299" name="Coconut" type="Coconut" x="6081.88" y="147.244"/>
+  <object id="300" name="Coconut" type="Coconut" x="6006.46" y="145.638"/>
+  <object id="302" name="Coconut" type="Coconut" x="6006.43" y="212.131"/>
+  <object id="303" name="Coconut" type="Coconut" x="6082.75" y="212.55"/>
+  <object id="304" name="Gold" type="Gold" x="6045.8" y="174.724"/>
+  <object id="305" name="Gold" type="Gold" x="6927" y="127.569"/>
+  <object id="306" name="Coin" type="Coin" x="7347.64" y="265.858"/>
+  <object id="308" name="Coin" type="Coin" x="7610.39" y="97.9478"/>
+  <object id="310" name="Coconut" type="Coconut" x="7200.9" y="127.051"/>
+  <object id="346" name="Coconut" type="Coconut" x="5216" y="96"/>
+ </objectgroup>
  <layer id="3" name="Tile Layer 1" width="250" height="20">
   <data encoding="csv">
 213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,25,26,26,26,26,26,26,14,14,14,15,213,213,213,213,213,25,14,14,37,38,14,14,14,14,14,14,14,14,14,14,15,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,9,22,22,70,71,22,14,14,14,14,14,22,22,22,22,14,14,14,14,14,14,14,14,14,14,14,14,14,26,26,26,26,26,26,26,26,26,26,37,38,62,63,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,213,
@@ -56,41 +121,6 @@
    </properties>
   </object>
   <object id="18" x="384" y="288" width="96" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="21" x="1408" y="0" width="224" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="22" x="1632" y="0" width="128" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="25" x="1920" y="0" width="32" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="26" x="1952" y="0" width="96" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="27" x="2048" y="0" width="128" height="160">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="28" x="2176" y="0" width="96" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="29" x="2272" y="0" width="160" height="160">
    <properties>
     <property name="collision" type="bool" value="true"/>
    </properties>
@@ -214,36 +244,6 @@
     <property name="collision" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="77" x="5120" y="0" width="928" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="79" x="5248" y="64" width="736" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="80" x="5312" y="96" width="32" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="81" x="5344" y="128" width="160" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="82" x="5472" y="96" width="32" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="84" x="5568" y="96" width="416" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="89" x="5472" y="480" width="160" height="64">
    <properties>
     <property name="collision" type="bool" value="true"/>
@@ -269,32 +269,6 @@
     <property name="collision" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="97" x="5952" y="64" width="32" height="32"/>
-  <object id="99" x="6048" y="0" width="992" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="100" x="6336" y="32" width="192" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="101" x="6400" y="64" width="32" height="96">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="102" x="6432" y="64" width="96" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="103" x="6496" y="96" width="32" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="106" x="5952" y="256" width="256" height="96">
    <properties>
     <property name="collision" type="bool" value="true"/>
@@ -310,22 +284,12 @@
     <property name="collision" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="109" x="6528" y="32" width="512" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="110" x="6976" y="64" width="64" height="96">
    <properties>
     <property name="collision" type="bool" value="true"/>
    </properties>
   </object>
   <object id="112" x="6880" y="160" width="192" height="64">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="113" x="7040" y="0" width="32" height="160">
    <properties>
     <property name="collision" type="bool" value="true"/>
    </properties>
@@ -665,11 +629,6 @@
     <property name="collision" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="328" x="5344" y="96" width="128" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
   <object id="329" x="7200" y="608" width="32" height="32">
    <properties>
     <property name="collision" type="bool" value="true"/>
@@ -681,36 +640,6 @@
    </properties>
   </object>
   <object id="331" x="7872" y="608" width="32" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="334" x="0" y="0" width="32" height="480">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="335" x="32" y="0" width="1376" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="336" x="1760" y="0" width="160" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="347" x="2432" y="0" width="2688" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="348" x="7072" y="0" width="928" height="32">
-   <properties>
-    <property name="collision" type="bool" value="true"/>
-   </properties>
-  </object>
-  <object id="349" x="7968" y="32" width="32" height="480">
    <properties>
     <property name="collision" type="bool" value="true"/>
    </properties>
@@ -844,70 +773,5 @@
  <objectgroup id="9" name="object1">
   <object id="184" name="Player" type="Player" x="95" y="283" width="32" height="32"/>
   <object id="186" name="END" type="END" x="7840" y="512" width="128"/>
- </objectgroup>
- <objectgroup id="11" name="collectibles">
-  <object id="240" name="Coin" type="Coin" x="1250.31" y="198.354"/>
-  <object id="241" name="Coin" type="Coin" x="1313.98" y="198.974"/>
-  <object id="242" name="Coin" type="Coin" x="1282.76" y="148.885"/>
-  <object id="244" name="Coin" type="Coin" x="1952" y="96"/>
-  <object id="245" name="Coin" type="Coin" x="1920" y="64"/>
-  <object id="246" name="Coin" type="Coin" x="1984" y="128"/>
-  <object id="247" name="Coin" type="Coin" x="2241.82" y="361.241"/>
-  <object id="248" name="Coin" type="Coin" x="2878.41" y="172.457"/>
-  <object id="249" name="Coin" type="Coin" x="2878.41" y="71.893"/>
-  <object id="250" name="Coin" type="Coin" x="2877.79" y="121.566"/>
-  <object id="252" name="Coin" type="Coin" x="4177.78" y="400"/>
-  <object id="253" name="Coin" type="Coin" x="4340.74" y="77.037"/>
-  <object id="254" name="Coin" type="Coin" x="3611.85" y="364.444"/>
-  <object id="255" name="Coin" type="Coin" x="3840" y="94.8148"/>
-  <object id="256" name="Coin" type="Coin" x="6692.17" y="530.487"/>
-  <object id="258" name="Coin" type="Coin" x="6833.39" y="534.43"/>
-  <object id="259" name="Coin" type="Coin" x="6768.53" y="532.563"/>
-  <object id="260" name="Coin" type="Coin" x="6725.62" y="472.042"/>
-  <object id="261" name="Coin" type="Coin" x="6807.82" y="471.272"/>
-  <object id="262" name="Coin" type="Coin" x="6769.42" y="414.133"/>
-  <object id="263" name="Gold" type="Gold" x="1388.39" y="362.286"/>
-  <object id="264" name="Gold" type="Gold" x="1793.43" y="416.292"/>
-  <object id="265" name="Gold" type="Gold" x="2223.22" y="99.0099"/>
-  <object id="266" name="Gold" type="Gold" x="3168" y="128"/>
-  <object id="267" name="Gold" type="Gold" x="3919.84" y="202.894"/>
-  <object id="268" name="Gold" type="Gold" x="3485.78" y="199.568"/>
-  <object id="269" name="Gold" type="Gold" x="4328.95" y="206.22"/>
-  <object id="271" name="Gold" type="Gold" x="4606.69" y="226.177"/>
-  <object id="272" name="Gold" type="Gold" x="5059.04" y="325.96"/>
-  <object id="273" name="Gold" type="Gold" x="5538" y="126.393"/>
-  <object id="274" name="Gold" type="Gold" x="5501.41" y="575.42"/>
-  <object id="275" name="Gold" type="Gold" x="5571.26" y="577.083"/>
-  <object id="276" name="Gold" type="Gold" x="5641.11" y="575.42"/>
-  <object id="277" name="Gold" type="Gold" x="6461.73" y="125.471"/>
-  <object id="278" name="Gold" type="Gold" x="7808" y="64"/>
-  <object id="279" name="Gold" type="Gold" x="7776" y="64"/>
-  <object id="280" name="Gold" type="Gold" x="7845.5" y="64"/>
-  <object id="282" name="Coconut" type="Coconut" x="1133.25" y="298.879"/>
-  <object id="283" name="Coconut" type="Coconut" x="2782.42" y="505.248"/>
-  <object id="284" name="Coconut" type="Coconut" x="2908.28" y="508.731"/>
-  <object id="285" name="Coconut" type="Coconut" x="3041.29" y="510.986"/>
-  <object id="286" name="Coconut" type="Coconut" x="3152.72" y="508.632"/>
-  <object id="287" name="Coconut" type="Coconut" x="3371.49" y="415.436"/>
-  <object id="288" name="Coconut" type="Coconut" x="3757.39" y="204.948"/>
-  <object id="289" name="Coconut" type="Coconut" x="4064" y="64"/>
-  <object id="292" name="Coconut" type="Coconut" x="4636.26" y="411.743"/>
-  <object id="293" name="Coconut" type="Coconut" x="4717.5" y="411.743"/>
-  <object id="294" name="Coconut" type="Coconut" x="4678.31" y="460.614"/>
-  <object id="295" name="Coconut" type="Coconut" x="5088" y="64"/>
-  <object id="296" name="Coconut" type="Coconut" x="5120" y="96"/>
-  <object id="297" name="Coconut" type="Coconut" x="5152" y="96"/>
-  <object id="298" name="Coconut" type="Coconut" x="5184" y="96"/>
-  <object id="345" name="Coconut" type="Coconut" x="5184" y="96"/>
-  <object id="299" name="Coconut" type="Coconut" x="6081.88" y="147.244"/>
-  <object id="300" name="Coconut" type="Coconut" x="6006.46" y="145.638"/>
-  <object id="302" name="Coconut" type="Coconut" x="6006.43" y="212.131"/>
-  <object id="303" name="Coconut" type="Coconut" x="6082.75" y="212.55"/>
-  <object id="304" name="Gold" type="Gold" x="6045.8" y="174.724"/>
-  <object id="305" name="Gold" type="Gold" x="6927" y="127.569"/>
-  <object id="306" name="Coin" type="Coin" x="7347.64" y="265.858"/>
-  <object id="308" name="Coin" type="Coin" x="7610.39" y="97.9478"/>
-  <object id="310" name="Coconut" type="Coconut" x="7200.9" y="127.051"/>
-  <object id="346" name="Coconut" type="Coconut" x="5216" y="96"/>
  </objectgroup>
 </map>
