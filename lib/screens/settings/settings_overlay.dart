@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_app_roject/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flame_audio/flame_audio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsOverlay extends StatefulWidget {
   const SettingsOverlay({super.key});
@@ -23,12 +24,26 @@ class SettingsOverlay extends StatefulWidget {
 class _SettingsOverlayState extends State<SettingsOverlay> {
   String gameMode = 'Normal';
   bool notifications = true;
-  bool music = true; 
-  bool sound = SettingsOverlay.soundEnabled; // Get initial sound setting
+  bool music = true;
+  bool sound = SettingsOverlay.soundEnabled;
 
   @override
   void initState() {
     super.initState();
+    _loadSettings();
+  }
+
+  Future<void> _loadSettings() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      gameMode = prefs.getString('gameMode') ?? 'Normal';
+      notifications = prefs.getBool('notifications') ?? true;
+      music = prefs.getBool('music') ?? true;
+      sound = prefs.getBool('sound') ?? true;
+      SettingsOverlay.soundEnabled = sound;
+    });
+
     _applySoundSettings();
   }
 
@@ -40,17 +55,21 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
     }
   }
 
-  void _toggleMusic(bool newValue) {
+  void _toggleMusic(bool newValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       music = newValue;
+      prefs.setBool('music', music);
       _applySoundSettings();
     });
   }
 
-  void _toggleSound(bool newValue) {
+  void _toggleSound(bool newValue) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       sound = newValue;
-      SettingsOverlay.soundEnabled = newValue; // Update global sound setting
+      SettingsOverlay.soundEnabled = newValue;
+      prefs.setBool('sound', sound);
     });
   }
 
@@ -66,9 +85,10 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
           border: Border.all(color: Colors.brown[700]!, width: 4.0),
           boxShadow: [
             BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7),
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+            ),
           ],
         ),
         padding: const EdgeInsets.all(16.0),
@@ -79,12 +99,14 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
               Text(
                 'Settings',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32,
-                    color: Colors.brown[700]),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                  color: Colors.brown[700],
+                ),
               ),
               const SizedBox(height: 20),
 
+              // Game Mode Dropdown
               _settingsRow(
                 icon: Icons.videogame_asset,
                 label: 'Game Mode',
@@ -101,24 +123,34 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                       child: Text(value, style: const TextStyle(fontSize: 18)),
                     );
                   }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() => gameMode = newValue!);
+                  onChanged: (String? newValue) async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    setState(() {
+                      gameMode = newValue!;
+                      prefs.setString('gameMode', gameMode);
+                    });
                   },
                 ),
               ),
 
+              // Notifications
               _settingsRow(
                 icon: Icons.notifications,
                 label: 'Notifications',
                 content: Switch(
                   value: notifications,
-                  onChanged: (bool newValue) {
-                    setState(() => notifications = newValue);
+                  onChanged: (bool newValue) async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    setState(() {
+                      notifications = newValue;
+                      prefs.setBool('notifications', notifications);
+                    });
                   },
                   activeColor: Colors.green[400],
                 ),
               ),
 
+              // Music
               _settingsRow(
                 icon: Icons.music_note,
                 label: 'Music',
@@ -129,6 +161,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                 ),
               ),
 
+              // Sound Effects
               _settingsRow(
                 icon: Icons.volume_up,
                 label: 'Sound Effects',
@@ -139,6 +172,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                 ),
               ),
 
+              // Help
               _settingsRow(
                 icon: Icons.help_outline,
                 label: 'Help',
@@ -148,6 +182,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                 ),
               ),
 
+              // Logout
               _settingsRow(
                 icon: Icons.logout,
                 label: 'Log out',
@@ -157,6 +192,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                 ),
               ),
 
+              // Back Button
               Center(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(backgroundColor: Colors.green[400]),
@@ -165,7 +201,7 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
                     Navigator.of(context).pop();
                   },
                   child: const Text(
-                    'Save Settings',
+                    'Back to Game',
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
@@ -224,6 +260,8 @@ class _SettingsOverlayState extends State<SettingsOverlay> {
 
   void _logout() async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
   }
 }
