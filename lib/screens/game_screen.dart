@@ -97,7 +97,7 @@ class _GameScreenState extends State<GameScreen> {
                     onSave: () async {
                       await game.saveGame(1);
                     },
-                    level: int.tryParse(game.activeLevel.levelName) ?? 1,
+                    level: int.tryParse(game.activeLevel.levelName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 1,
                     score: game.score,
                     coins: game.coins,
                     gold: game.gold,

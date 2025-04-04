@@ -164,7 +164,7 @@ class PlatFormerGameDev extends FlameGame
   /// Saves the current game state
   Future<void> saveGame(int slot) async {
     await saveManager.saveGame(slot, GameState(
-      level: int.parse(activeLevel.levelName),
+      level: int.tryParse(activeLevel.levelName.replaceAll(RegExp(r'[^0-9]'), '')) ?? 1,
       score: score,
       coins: coins,
       coconut: coconut,
