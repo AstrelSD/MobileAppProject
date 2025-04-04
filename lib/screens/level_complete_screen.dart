@@ -180,7 +180,7 @@ class _LevelCompleteScreenState extends State<LevelCompleteScreen>
                         : () {
                             // Extract the level number from the string (e.g., 'level1' -> 1)
                             int currentLevel = int.parse(widget.initialLevel.replaceFirst('level', ''));
-                            int nextLevel = currentLevel + 2;
+                            int nextLevel = currentLevel + 1;
 
                             Navigator.pushReplacement(
                               context,
