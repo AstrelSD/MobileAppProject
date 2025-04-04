@@ -2,6 +2,10 @@ import 'package:mobile_app_roject/levels/base_level.dart';
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:mobile_app_roject/actors/character.dart';
+import 'package:mobile_app_roject/actors/collectibles/coconut.dart';
+import 'package:mobile_app_roject/actors/collectibles/coin.dart';
+import 'package:mobile_app_roject/actors/collectibles/gold.dart';
+import 'package:flame/components.dart';
 import 'dart:async'; // Add this for Completer
 
 class Level3 extends Level {
@@ -19,6 +23,12 @@ class Level3 extends Level {
     if (spawnPointsLayer == null) {
       throw Exception('object1 layer not found in map');
     }
+    final collectiblesLayer = level.tileMap.getLayer<ObjectGroup>('collectibles');
+    if (collectiblesLayer != null) {
+      await _loadCollectibles(collectiblesLayer);
+    }
+    
+
 
     bool playerFound = false;
     for (final spawnPoint in spawnPointsLayer.objects) {
@@ -54,6 +64,7 @@ class Level3 extends Level {
       _completer.complete();
     }
   }
+  
 
   @override
   void loadLevelMechanics() {
@@ -61,4 +72,22 @@ class Level3 extends Level {
 
   @override
   Future<void> get ready => _completer.future;
+
+
+Future<void> _loadCollectibles(ObjectGroup collectiblesLayer) async {
+  for (final collectible in collectiblesLayer.objects) {
+    final position = Vector2(collectible.x, collectible.y);
+    switch (collectible.class_) {
+      case 'Coin':
+        add(Coin(position: position));
+        break;
+      case 'Gold':
+        add(Gold(position: position));
+        break;
+      case 'Coconut':
+        add(Coconut(position: position));
+        break;
+        }
+        }
+    }
 }
